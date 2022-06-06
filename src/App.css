@@ -1,0 +1,54 @@
+.container {
+    display: flex;
+}
+
+.dashboard.container, 
+.add.container,
+.loading.container {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard.container .wrapper, 
+.add.container .wrapper,
+.loading.container .wrapper {
+    width: 50%;
+    margin: 10px;
+    text-align: center;
+}
+
+.list.container {
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.list > .todo {
+    width: 250px;
+    margin: 10px;
+}
+
+.todo .completed {
+    background-color: mediumaquamarine;
+}
+
+.todo .pending {
+    background-color: khaki;
+}
+
+.todo .textLabel {
+    min-height: 25px;
+    margin-top: 1px;
+    overflow-wrap: break-word;
+    white-space: pre-line;
+}
+
+.todo .textInput {
+    padding-top: 1px;
+    line-height: 1.5;
+    padding-bottom: 0;
+}
+
+.todo .actions {
+    justify-content: space-between;
+}
