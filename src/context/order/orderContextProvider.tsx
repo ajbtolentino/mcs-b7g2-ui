@@ -1,23 +1,22 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { ITodo } from "../../models/ITodo";
-import { TodoContext } from "./todoContext";
+import { IOrder } from "../../models/IOrder";
+import { TodoContext } from "./orderContext";
 
 const GET_URL: string = "https://localhost:5001/api/Todo/";
 const POST_URL: string = "https://localhost:5001/api/Todo/";
 const PUT_URL = (id: number): string => `https://localhost:5001/api/Todo/${id}`;
 const DELETE_URL = (id: number): string => `https://localhost:5001/api/Todo/${id}`;
 
-interface ITodoModel {
+interface IOrderModel {
     id: number;
     text: string;
-    completed: boolean;
     createdBy: string;
     dateCreated: Date;
 }
 
-export const TodoContextProvider: React.FC<{}> = (props) => {
-    const [todos, setTodos] = useState<ITodo[]>([]);
+export const OrderContextProvider: React.FC<{}> = (props) => {
+    const [todos, setTodos] = useState<IOrder[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [errors, setErrors] = useState<string[]>([]);
 
@@ -25,21 +24,20 @@ export const TodoContextProvider: React.FC<{}> = (props) => {
         setErrors(["Something went wrong. Please try again."]);
     };
 
-    const getTodos = async () => {
+    const getOrders = async () => {
         try {
             setErrors([]);
             setLoading(true);
 
-            const response = await axios.get<ITodoModel[]>(GET_URL);
+            const response = await axios.get<IOrderModel[]>(GET_URL);
 
-            const items: ITodo[] = response.data.map(d => {
+            const orders: IOrder[] = response.data.map(d => {
                 return {
-                    id: d.id,
-                    text: d.text,
-                    completed: d.completed
+                    id: 0,
+                    orderItems: []
                 };});
 
-            setTodos([...items]);
+            setTodos([...orders]);
         } catch (err: any) {
             handleError(err);
         } finally {
@@ -47,7 +45,7 @@ export const TodoContextProvider: React.FC<{}> = (props) => {
         }
     };
 
-    const addTodo = async (text: string) => {
+    const addOrder = async (text: string) => {
         try {
             setErrors([]);
             setLoading(true);
@@ -61,11 +59,11 @@ export const TodoContextProvider: React.FC<{}> = (props) => {
         } finally {
             setTimeout(() => setLoading(false), 5000);
 
-            await getTodos!();
+            await getOrders!();
         }
     };
 
-    const deleteTodo = async (id: number) => {
+    const deleteOrder = async (id: number) => {
         try {
             setErrors([]);
             setLoading(true);
@@ -79,11 +77,11 @@ export const TodoContextProvider: React.FC<{}> = (props) => {
         } finally {
             setTimeout(() => setLoading(false), 5000);
 
-            await getTodos!();
+            await getOrders!();
         }
     };
 
-    const updateTodo = async (id: number, 
+    const updateOrder = async (id: number, 
                               text: string, 
                               completed: boolean,
                               category: string) => {
@@ -105,7 +103,7 @@ export const TodoContextProvider: React.FC<{}> = (props) => {
         } finally {
             setTimeout(() => setLoading(false), 5000);
 
-            await getTodos!();
+            await getOrders!();
         }
     };
 
@@ -114,8 +112,7 @@ export const TodoContextProvider: React.FC<{}> = (props) => {
             if(task.id !== id) return task;
 
             return {
-                ...task,
-                completed: !task.completed
+                ...task
             };
         });
 
@@ -125,14 +122,13 @@ export const TodoContextProvider: React.FC<{}> = (props) => {
     return(
         <TodoContext.Provider
             value={{
-                todos: todos,
+                orders: todos,
                 loading: loading,
                 errors: errors,
-                getTodos: getTodos,
-                addTodo: addTodo,
-                deleteTodo: deleteTodo,
-                updateTodo: updateTodo,
-                toggleCompleted: toggleCompleted
+                getOrders: getOrders,
+                addOrder: addOrder,
+                deleteOrder: deleteOrder,
+                updateOrder: updateOrder
             }}>
                 {props.children}
         </TodoContext.Provider>

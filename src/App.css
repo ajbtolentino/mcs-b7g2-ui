@@ -1,54 +1,68 @@
+body {
+    background-color: #b2bec3;
+}
+
 .container {
     display: flex;
 }
 
+.dashboard {
+    flex-direction: row !important;
+}
+
+.order {
+    align-items: flex-start !important;
+}
+
 .dashboard.container, 
-.add.container,
-.loading.container {
-    flex-direction: column;
+.enter.container,
+.order.container{
+  flex-direction: column;
+}
+
+.enter.container {
     align-items: center;
     justify-content: center;
 }
 
-.dashboard.container .wrapper, 
-.add.container .wrapper,
-.loading.container .wrapper {
-    width: 50%;
-    margin: 10px;
-    text-align: center;
+.enter.container {
+  min-width: 400px;
+  min-height: 100vh;
 }
 
-.list.container {
+.enter .wrapper {
+  width: 400px;
+}
+ 
+.menu.container {
     flex-wrap: wrap;
     justify-content: center;
+    align-content: flex-start;
 }
 
-.list > .todo {
+.menu > .menuItem {
     width: 250px;
     margin: 10px;
 }
 
-.todo .completed {
-    background-color: mediumaquamarine;
+.order.container {
+    margin: 10px;
+    min-height: 100vh;
+    align-items: flex-start !important;
+    justify-content: flex-start;
 }
 
-.todo .pending {
-    background-color: khaki;
-}
-
-.todo .textLabel {
-    min-height: 25px;
-    margin-top: 1px;
-    overflow-wrap: break-word;
-    white-space: pre-line;
-}
-
-.todo .textInput {
-    padding-top: 1px;
-    line-height: 1.5;
-    padding-bottom: 0;
-}
-
-.todo .actions {
+.order > div {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
     justify-content: space-between;
+}
+
+.order .orderItem {
+    margin: 10px;
+}
+
+.MuiCardContent-root {
+    margin-bottom: auto;
 }
