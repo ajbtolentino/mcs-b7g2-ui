@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { IOrder } from "../../models/IOrder";
 import { TodoContext } from "./orderContext";
 
-const GET_URL: string = "https://localhost:5001/api/Todo/";
-const POST_URL: string = "https://localhost:5001/api/Todo/";
-const PUT_URL = (id: number): string => `https://localhost:5001/api/Todo/${id}`;
-const DELETE_URL = (id: number): string => `https://localhost:5001/api/Todo/${id}`;
+const GET_URL: string = "https://localhost:5001/";
+const PLACE_ORDER_URL: string = "https://localhost:5001/";
+const PUT_URL = (id: number): string => `https://localhost:5001/`;
+const DELETE_URL = (id: number): string => `https://localhost:5001/`;
 
 interface IOrderModel {
     id: number;
@@ -50,7 +50,7 @@ export const OrderContextProvider: React.FC<{}> = (props) => {
             setErrors([]);
             setLoading(true);
 
-            await axios.post(POST_URL, { "text": text },
+            await axios.post(PLACE_ORDER_URL, { "text": text },
             {
                 headers: { "Content-Type": "application/json" }
             });

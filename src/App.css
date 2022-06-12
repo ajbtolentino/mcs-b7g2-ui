@@ -16,8 +16,14 @@ body {
 
 .dashboard.container, 
 .enter.container,
-.order.container{
+.order.container,
+.loading.container {
   flex-direction: column;
+}
+
+.loading.container {
+    height: 100vh;
+    justify-content: center;
 }
 
 .enter.container {
@@ -35,6 +41,7 @@ body {
 }
  
 .menu.container {
+  flex-grow: 1;
     flex-wrap: wrap;
     justify-content: center;
     align-content: flex-start;
@@ -65,4 +72,8 @@ body {
 
 .MuiCardContent-root {
     margin-bottom: auto;
+}
+
+.MuiCardHeader-root {
+    flex-direction: row-reverse;
 }

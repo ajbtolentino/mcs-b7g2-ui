@@ -2,7 +2,7 @@ import { Button, Card, CardContent, Grid, TextField, Typography } from "@mui/mat
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const Enter = () => {
+export const PlaceOrder = () => {
     const [name, setName] = useState<string>("");
 
     const navigate = useNavigate();

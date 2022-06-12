@@ -1,6 +1,10 @@
 export interface IMenuItem {
     id: number;
     name: string;
-    image: string;
-    price: number;
+    description: string;
+    category: string;
+    itemPrice: number;
+    prepTimeInSec: number;
+    cookTimeInSec: number;
+    chefRecommendation: boolean;
 }
