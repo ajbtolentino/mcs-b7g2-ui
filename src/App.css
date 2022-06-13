@@ -1,5 +1,5 @@
 body {
-    background-color: #b2bec3;
+    background-color: 		#813531;
 }
 
 .container {
@@ -24,6 +24,7 @@ body {
 .loading.container {
     height: 100vh;
     justify-content: center;
+    align-items: center;
 }
 
 .enter.container {
@@ -41,13 +42,57 @@ body {
 }
  
 .menu.container {
-  flex-grow: 1;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-content: flex-start;
+    flex-grow: 1;
+    flex-direction: column;
 }
 
-.menu > .menuItem {
+.menu .filters {
+    padding: 10px;
+    justify-content: space-around;
+}
+
+.menu .filters button {
+    border-color: 		#ffb80e;
+    color: 			#ffb80e;
+}
+
+.menu .items {
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.menu .items .MuiPaper-root {
+    background-color: #ffb80e;
+    color: #982121;
+}
+
+.menu .items .MuiCardHeader-root {
+    min-height: 35px;
+}
+
+.menu .items .MuiCardHeader-root {
+    flex-direction: row-reverse;
+    min-height: 35px;
+}
+
+.menu .items .MuiCardHeader-avatar {
+    margin-right: auto;
+}
+
+.menu .items .MuiCardContent-root {
+    margin-bottom: auto;
+}
+
+.menu .items .MuiCardContent-root .details {
+    display: flex;
+    justify-content: space-between;
+}
+
+.menu .items .MuiCardActions-root button {
+    background-color: #982121;
+}
+
+.menu .items > .menuItem {
     width: 250px;
     margin: 10px;
 }
@@ -66,14 +111,11 @@ body {
     justify-content: space-between;
 }
 
+.order.container > .MuiPaper-root {
+    position: sticky;
+    top: 1rem
+}
+
 .order .orderItem {
     margin: 10px;
-}
-
-.MuiCardContent-root {
-    margin-bottom: auto;
-}
-
-.MuiCardHeader-root {
-    flex-direction: row-reverse;
 }

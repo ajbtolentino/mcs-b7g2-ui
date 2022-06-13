@@ -6,6 +6,7 @@ interface IMenuContext {
     errors: string[];
     items: IMenuItem[];
     getAllItems?: () => Promise<void>;
+    filterByCategory?: (categoryId: number) => Promise<void>;
 };
 
 export const MenuContext = React.createContext<IMenuContext>({

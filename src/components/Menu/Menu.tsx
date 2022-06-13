@@ -1,8 +1,9 @@
-import { CircularProgress } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useMenu } from "../../hooks/useMenu";
 import { IMenu } from "../../models/IMenu";
 import { IMenuItem } from "../../models/IMenuItem";
+import { Filters } from "./Filters";
 import { MenuItem } from "./MenuItem";
 
 export const Menu = () => {
@@ -14,9 +15,14 @@ export const Menu = () => {
 
     return (
         <>
+            <div className="filters container">
+                <Filters />
+            </div>
             {
-               !loading && 
-               items.map(item => <div key={item.id} className="menuItem"><MenuItem {...item} /></div>)
+                !loading && items.length > 0 &&
+                <div className="items container">
+                    {items.map(item => <div key={item.id} className="menuItem"><MenuItem {...item} /></div>)}
+                </div>
             }
             {
                 loading && 

@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { IMenuItem } from "../../models/IMenuItem";
 import { MenuContext } from "./menuContext";
 
-const GET_MENU_URL: string = "https://localhost:5001/Menu/GetAll";
-const FILTER_BY_CATEGORY_URL: string = "https://localhost:5001/";
-const FILTER_BY_CHEF_RECOMMENDATION_URL = (id: number): string => `https://localhost:5001/`;
+const GET_MENU_URL: string = "/Menu/GetAll";
+const FILTER_BY_CATEGORY_URL = (categoryId: number): string => `/Menu/GetByCategory?category=${categoryId}`;
+const FILTER_BY_CHEF_RECOMMENDATION_URL = (categoryId: number): string => `/Menu/GetChefRecommendation?category=${categoryId}`;
 
 export const MenuContextProvider: React.FC<{}> = (props) => {
     const [items, setItems] = useState<IMenuItem[]>([]);
@@ -31,8 +31,20 @@ export const MenuContextProvider: React.FC<{}> = (props) => {
         }
     };
 
-    const filterBy = () => {
-        
+    const filterByCategory = async (categoryId: number) => {
+        try {
+            setErrors([]);
+            setLoading(true);
+
+            const nonChefRecommendation = await axios.get<IMenuItem[]>(FILTER_BY_CATEGORY_URL(categoryId));
+            const chefRecommendation = await axios.get<IMenuItem[]>(FILTER_BY_CHEF_RECOMMENDATION_URL(categoryId));
+
+            setItems([...chefRecommendation.data, ...nonChefRecommendation.data]);
+        } catch (err: any) {
+            handleError(err);
+        } finally {
+            setLoading(false);
+        }
     }
 
     return(
@@ -40,7 +52,8 @@ export const MenuContextProvider: React.FC<{}> = (props) => {
             loading: loading,
             errors: errors,
             items: [...items],
-            getAllItems: getAllItems
+            getAllItems: getAllItems,
+            filterByCategory: filterByCategory
         }}>
             {props.children}
         </MenuContext.Provider>

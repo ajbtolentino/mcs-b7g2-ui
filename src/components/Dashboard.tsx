@@ -1,8 +1,8 @@
-import { Alert, Snackbar } from "@mui/material";
+import { Alert, Button, Snackbar } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useMenu } from "../../hooks/useMenu";
-import { Menu } from "../Menu/Menu";
-import { Order } from "../Order/Order";
+import { useMenu } from "../hooks/useMenu";
+import { Menu } from "./Menu/Menu";
+import { Order } from "./Order/Order";
 
 export const Dashboard = () => {
     const { errors: menuErrors } = useMenu();
