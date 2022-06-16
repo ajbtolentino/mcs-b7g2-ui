@@ -2,5 +2,9 @@ import { IOrderItem } from "./IOrderItem";
 
 export interface IOrder {
     id: number;
-    orderItems: IOrderItem[]
+    status: number;
+    totalBill: number;
+    inclusiveTax: number;
+    serviceCharge: number;
+    orderItems: IOrderItem[];
 }
