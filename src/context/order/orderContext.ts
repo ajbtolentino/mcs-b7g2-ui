@@ -2,17 +2,18 @@ import React from "react";
 import { IOrder } from "../../models/IOrder";
 
 interface IOrderContext {
-    orders: IOrder[];
+    order?: IOrder;
     loading: boolean;
     errors: string[];
-    getOrders?: () => Promise<void>;
-    addOrder?: (text: string) => Promise<void>;
-    deleteOrder?: (id: number) => Promise<void>;
-    updateOrder?: (id: number, text: string, completed: boolean, category: string) => Promise<void>;
+    getById?: (orderId: number) => Promise<void>;
+    complete?: () => Promise<void>;
+    place?: () => Promise<void>;
+    cancel?: () => Promise<void>;
+    addOrderItem?: (menuId: number, quantity: number) => Promise<void>;
+    addRecommended?: (category: number) => Promise<void>;
 };
 
-export const TodoContext = React.createContext<IOrderContext>({
-    orders: [],
+export const OrderContext = React.createContext<IOrderContext>({
     loading: false,
     errors: []
 });

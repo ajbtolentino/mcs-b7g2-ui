@@ -3,13 +3,26 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Dashboard } from '@mui/icons-material';
+import { NotFound } from './components/NotFound';
+import { MenuContextProvider } from './context/menu/menuContextProvider';
+import { OrderContext } from './context/order/orderContext';
+import { OrderContextProvider } from './context/order/orderContextProvider';
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <OrderContextProvider>
+      <MenuContextProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/:orderId" element={<App />} />
+            <Route path="*" element={<NotFound />}/>
+          </Routes>
+        </BrowserRouter>
+      </MenuContextProvider>
+    </OrderContextProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -1,6 +1,7 @@
 import { Button, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useMenu } from "../../hooks/useMenu";
+import { useOrder } from "../../hooks/useOrder";
 import { IMenu } from "../../models/IMenu";
 import { IMenuItem } from "../../models/IMenuItem";
 import { Filters } from "./Filters";

@@ -14,7 +14,7 @@ export const PlaceOrder = () => {
     const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
-        // login!(email, password);
+        
     };
 
     return (

@@ -4,22 +4,25 @@ import WhatshotOutlinedIcon from '@mui/icons-material/WhatshotOutlined';
 import FreeBreakfastIcon from '@mui/icons-material/FreeBreakfast';
 import IcecreamIcon from '@mui/icons-material/Icecream';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
-import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
+import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import OutdoorGrillIcon from '@mui/icons-material/OutdoorGrill';
+import { useOrder } from "../../hooks/useOrder";
 
 export const MenuItem: React.FC<IMenuItem> = (props: IMenuItem) => {
+    const { order, addOrderItem } = useOrder();
+
     const renderCategory = () => {
         switch(props.category) {
             case 1:
-                return <Tooltip title="Drinks"><FreeBreakfastIcon fontSize="small"/></Tooltip>;
+                return <Tooltip title="Appetizer"><SoupKitchenIcon fontSize="small"/></Tooltip>;
             case 2:
-                return <Tooltip title="Dessert"><IcecreamIcon fontSize="small"/></Tooltip>;
+                return <Tooltip title="Main Course"><RestaurantMenuIcon fontSize="small"/></Tooltip>;
             case 3:
-                return <Tooltip title="Main"><RestaurantMenuIcon fontSize="small"/></Tooltip>;
+                return <Tooltip title="Dessert"><IcecreamIcon fontSize="small"/></Tooltip>;
             case 4:
-                return <Tooltip title="Pasta"><DinnerDiningIcon fontSize="small"/></Tooltip>;
+                return <Tooltip title="Drink"><FreeBreakfastIcon fontSize="small"/></Tooltip>;
             default:
                 return "";
         };
@@ -38,7 +41,7 @@ export const MenuItem: React.FC<IMenuItem> = (props: IMenuItem) => {
             <CardMedia
                 component="img"
                 height="100"
-                image={`/menu/${props.id}.jpg`}
+                image={`/menu/${props.category}.jpg`}
                 alt={props.name}
             />
             <CardContent>
@@ -60,9 +63,12 @@ export const MenuItem: React.FC<IMenuItem> = (props: IMenuItem) => {
                     </Typography>
                 </div>
             </CardContent>
-            <CardActions>
-                <Button variant="contained" fullWidth>Add</Button>
-            </CardActions>
+            {
+                order &&
+                <CardActions>
+                    <Button variant="contained" fullWidth onClick={() => addOrderItem!(props.id, 1)}>Add</Button>
+                </CardActions>
+            }
         </Card>
     )
 }

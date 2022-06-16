@@ -10,13 +10,13 @@ body {
     flex-direction: row !important;
 }
 
-.order {
+.left {
     align-items: flex-start !important;
 }
 
 .dashboard.container, 
 .enter.container,
-.order.container,
+.left.container,
 .loading.container {
   flex-direction: column;
 }
@@ -43,6 +43,28 @@ body {
  
 .menu.container {
     flex-grow: 1;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.recommended {
+    flex-direction: column;
+    flex-grow: 0;
+}
+
+.recommended .title {
+    color: white;
+}
+
+.recommended .actions {
+    flex-direction: column;
+}
+
+.recommended .actions button {
+    margin-bottom: 5px;
+}
+
+.recommended .MuiCardActions-root {
     flex-direction: column;
 }
 
@@ -54,16 +76,12 @@ body {
 .menu .filters button {
     border-color: 		#ffb80e;
     color: 			#ffb80e;
+    margin-right: 10px;
 }
 
 .menu .items {
     flex-wrap: wrap;
     justify-content: center;
-}
-
-.menu .items .MuiPaper-root {
-    background-color: #ffb80e;
-    color: #982121;
 }
 
 .menu .items .MuiCardHeader-root {
@@ -88,34 +106,40 @@ body {
     justify-content: space-between;
 }
 
-.menu .items .MuiCardActions-root button {
-    background-color: #982121;
-}
-
 .menu .items > .menuItem {
     width: 250px;
     margin: 10px;
 }
 
-.order.container {
-    margin: 10px;
-    min-height: 100vh;
+.left.container {
     align-items: flex-start !important;
     justify-content: flex-start;
 }
 
-.order > div {
-    width: 300px;
+.left > div {
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+.left .orderItem {
+    margin: 10px;
+}
+
+.left .orderItem .price {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
 }
 
-.order.container > .MuiPaper-root {
-    position: sticky;
-    top: 1rem
+.left .MuiTypography-root {
+    text-align: center;
 }
 
-.order .orderItem {
-    margin: 10px;
+.MuiPaper-root {
+    background-color: #ffb80e !important;
+    color: #982121 !important;
+}
+
+.MuiPaper-root button {
+    background-color: #982121 !important;
+    color: white;
 }

@@ -1,22 +1,17 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IOrder } from "../../models/IOrder";
-import { TodoContext } from "./orderContext";
+import { OrderContext } from "./orderContext";
 
-const GET_URL: string = "https://localhost:5001/";
-const PLACE_ORDER_URL: string = "https://localhost:5001/";
-const PUT_URL = (id: number): string => `https://localhost:5001/`;
-const DELETE_URL = (id: number): string => `https://localhost:5001/`;
-
-interface IOrderModel {
-    id: number;
-    text: string;
-    createdBy: string;
-    dateCreated: Date;
-}
+const GET_BY_ID_URL = (orderId: number): string => `/Order/Get?orderId=${orderId}`;
+const PLACE_ORDER_URL = (tableNumber: number, customerName: string) => `/Order/Place?tableNumber=${tableNumber}&customerName=${customerName}`;
+const COMPLETE_URL = (orderId: number) => `/Order/Complete?orderId=${orderId}`;
+const ADD_RECOMMENDED_URL = (orderId: number, category: number): string => `/Order/AddChefRecommended?orderId=${orderId}&category=${category}`;
+const ADD_ORDER_ITEM_URL = (orderId: number, menuId: number, quantity: number): string => `/Order/AddOrderItem?orderId=${orderId}&menuId=${menuId}&quantity=${quantity}`;
+const DELETE_URL = (orderId: number): string => `/Order/Cancel?orderId${orderId}`;
 
 export const OrderContextProvider: React.FC<{}> = (props) => {
-    const [todos, setTodos] = useState<IOrder[]>([]);
+    const [order, setOrder] = useState<IOrder>();
     const [loading, setLoading] = useState<boolean>(false);
     const [errors, setErrors] = useState<string[]>([]);
 
@@ -24,113 +19,120 @@ export const OrderContextProvider: React.FC<{}> = (props) => {
         setErrors(["Something went wrong. Please try again."]);
     };
 
-    const getOrders = async () => {
+    const getById = async (orderId: number) => {
         try {
             setErrors([]);
             setLoading(true);
 
-            const response = await axios.get<IOrderModel[]>(GET_URL);
+            const response = await axios.get<IOrder>(GET_BY_ID_URL(orderId));
 
-            const orders: IOrder[] = response.data.map(d => {
-                return {
-                    id: 0,
-                    orderItems: []
-                };});
-
-            setTodos([...orders]);
+            setOrder(response.data);
         } catch (err: any) {
             handleError(err);
         } finally {
-            setTimeout(() => setLoading(false), 5000);
+            setLoading(false);
         }
     };
 
-    const addOrder = async (text: string) => {
+    const place = async () => {
         try {
             setErrors([]);
             setLoading(true);
 
-            await axios.post(PLACE_ORDER_URL, { "text": text },
+            const response = await axios.post<IOrder>(PLACE_ORDER_URL(1, "test"),
+            {
+                headers: { "Content-Type": "application/json" }
+            });
+
+            setOrder(response.data);
+        } catch (err: any) {
+            handleError(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const complete = async () => {
+        try {
+            setErrors([]);
+            setLoading(true);
+
+            await axios.post(COMPLETE_URL(order?.id ?? 0),
+            {
+                headers: { "Content-Type": "application/json" }
+            });
+
+            setOrder(undefined);
+        } catch (err: any) {
+            handleError(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const addOrderItem = async (menuId: number, quantity: number) => {
+        try {
+            setErrors([]);
+            setLoading(true);
+
+            await axios.put(ADD_ORDER_ITEM_URL(order?.id ?? 0, menuId, quantity),
             {
                 headers: { "Content-Type": "application/json" }
             });
         } catch (err: any) {
             handleError(err);
         } finally {
-            setTimeout(() => setLoading(false), 5000);
+            setLoading(false);
 
-            await getOrders!();
+            getById(order?.id ?? 0);
         }
     };
 
-    const deleteOrder = async (id: number) => {
+    const addRecommended = async (category: number) => {
         try {
             setErrors([]);
             setLoading(true);
 
-            await axios.delete(DELETE_URL(id),
+            await axios.put(ADD_RECOMMENDED_URL(order?.id ?? 0, category));
+        } catch (err: any) {
+            handleError(err);
+        } finally {
+            setLoading(false);
+
+            getById(order?.id ?? 0);
+        }
+    }
+
+    const cancel = async () => {
+        try {
+            setErrors([]);
+            setLoading(true);
+
+            await axios.delete(DELETE_URL(order?.id ?? 0),
             {
                 headers: { "Content-Type": "application/json" }
             });
         } catch (err: any) {
             handleError(err);
         } finally {
-            setTimeout(() => setLoading(false), 5000);
-
-            await getOrders!();
+            setLoading(false);
         }
-    };
-
-    const updateOrder = async (id: number, 
-                              text: string, 
-                              completed: boolean,
-                              category: string) => {
-        try {
-            setErrors([]);
-            setLoading(true);
-
-            await axios.put(PUT_URL(id), 
-            {
-                "text": text, 
-                "completed":  completed,
-                "category": category
-            },
-            {
-                headers: { "Content-Type": "application/json" }
-            });
-        } catch (err: any) {
-            handleError(err);
-        } finally {
-            setTimeout(() => setLoading(false), 5000);
-
-            await getOrders!();
-        }
-    };
-
-    const toggleCompleted = (id: number) => {
-        const updatedTasks = todos.map(task => {
-            if(task.id !== id) return task;
-
-            return {
-                ...task
-            };
-        });
-
-        setTodos([...updatedTasks]);
     };
       
     return(
-        <TodoContext.Provider
+        <OrderContext.Provider
             value={{
-                orders: todos,
+                order: order,
                 loading: loading,
                 errors: errors,
-                getOrders: getOrders,
-                addOrder: addOrder,
-                deleteOrder: deleteOrder,
-                updateOrder: updateOrder
+                getById: getById,
+                place: place,
+                complete: complete,
+                cancel: cancel,
+                addOrderItem: addOrderItem,
+                addRecommended: addRecommended
             }}>
                 {props.children}
-        </TodoContext.Provider>
+        </OrderContext.Provider>
     )
 }

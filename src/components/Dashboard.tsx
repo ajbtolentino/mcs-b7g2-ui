@@ -1,11 +1,15 @@
 import { Alert, Button, Snackbar } from "@mui/material";
+import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useMenu } from "../hooks/useMenu";
+import { useOrder } from "../hooks/useOrder";
+import { ChefRecommended } from "./Menu/ChefRecommended";
 import { Menu } from "./Menu/Menu";
 import { Order } from "./Order/Order";
 
 export const Dashboard = () => {
     const { errors: menuErrors } = useMenu();
+    const { order } = useOrder();
 
     const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
     const [snackbarMessage, setSnackbarMessage] = useState<string>("");
@@ -33,11 +37,19 @@ export const Dashboard = () => {
         </Snackbar>
 
         <div className="dashboard container">
+            <div className="left container">
+                {
+                    order && 
+                    <Box className="recommended">
+                        <ChefRecommended />
+                    </Box>
+                }
+                <Box className="order">
+                    <Order  />
+                </Box>
+            </div>
             <div className="menu container">
                 <Menu />
-            </div>
-            <div className="order container">
-                <Order  />
             </div>
         </div>
     </>

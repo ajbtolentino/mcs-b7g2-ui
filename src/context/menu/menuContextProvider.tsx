@@ -36,10 +36,9 @@ export const MenuContextProvider: React.FC<{}> = (props) => {
             setErrors([]);
             setLoading(true);
 
-            const nonChefRecommendation = await axios.get<IMenuItem[]>(FILTER_BY_CATEGORY_URL(categoryId));
-            const chefRecommendation = await axios.get<IMenuItem[]>(FILTER_BY_CHEF_RECOMMENDATION_URL(categoryId));
+            const menu = await axios.get<IMenuItem[]>(FILTER_BY_CATEGORY_URL(categoryId));
 
-            setItems([...chefRecommendation.data, ...nonChefRecommendation.data]);
+            setItems([...menu.data]);
         } catch (err: any) {
             handleError(err);
         } finally {
