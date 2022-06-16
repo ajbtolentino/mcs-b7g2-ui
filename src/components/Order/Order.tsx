@@ -63,11 +63,10 @@ export const Order = () => {
                     </div>
                 }
                 { 
-                    (isBillout || showStatus) &&
                     order?.orderItems.map(item => 
                         {
                             return <div key={item.id}>
-                                {showStatus && <OrderItemStatus {...item} />}
+                                {!isBillout && <OrderItemStatus {...item} />}
                                 {isBillout && <OrderItem {...item} />}
                             </div>;
                         }
@@ -94,18 +93,6 @@ export const Order = () => {
             {
                 order?.orderItems && order?.orderItems?.length > 0 && 
                 <CardActions className="orderCommands">
-                    {
-                        order && order.orderItems.length > 0 && !isBillout && !showStatus &&
-                        <Button fullWidth onClick={() => setShowStatus(true)}>
-                            Show Order Details
-                        </Button>
-                    }
-                    {
-                        order && !isBillout && showStatus &&
-                        <Button fullWidth onClick={() => setShowStatus(false)}>
-                            Hide Order Details
-                        </Button>
-                    }
                     {
                         isBillout &&
                         <Button sx={{width:1}} variant="contained" onClick={onCompleteOrder}>

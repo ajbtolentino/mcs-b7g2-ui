@@ -152,6 +152,11 @@ body {
     margin-bottom: 10px;
 }
 
+.orderItemStatus {
+    display: flex;
+    justify-content: space-between;
+}
+
 .left .totalBill .billPrice.totalBillPrice {
     border-top: 2px solid #982121 !important;
 }

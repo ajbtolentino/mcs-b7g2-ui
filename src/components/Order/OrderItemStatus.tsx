@@ -14,11 +14,12 @@ export const OrderItemStatus: React.FC<IOrderItem> = (props: IOrderItem) => {
     };
 
     return (
-        <Card className="orderItem" >
+        <Card className="orderItem">
             <CardContent>               
-                <div className="price">
+                <div className="orderItemStatus">
                     <Typography variant="caption">{props.menu.name} </Typography>
                     <Typography variant="caption">x {props.quantity}</Typography>
+                    <Typography variant="caption">= {props.totalPrice}</Typography>
                 </div>
                 <div>
                     <Typography variant="caption">{renderStatus(props.status)}</Typography>
