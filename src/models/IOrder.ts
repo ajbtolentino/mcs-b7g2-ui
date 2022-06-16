@@ -6,5 +6,7 @@ export interface IOrder {
     totalBill: number;
     inclusiveTax: number;
     serviceCharge: number;
+    remainingPreparationTime: number;
+    remainingCookingTime: number;
     orderItems: IOrderItem[];
 }

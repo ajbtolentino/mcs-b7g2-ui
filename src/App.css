@@ -141,6 +141,17 @@ body {
     justify-content: space-between;
 }
 
+.left .orderCommands {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.left .orderCommands button {
+    margin-bottom: 10px;
+}
+
 .left .totalBill .billPrice.totalBillPrice {
     border-top: 2px solid #982121 !important;
 }

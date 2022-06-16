@@ -5,6 +5,8 @@ export interface IOrderItem {
     name: string;
     quantity: number;
     status: number;
+    remainingCookingTime: number;
+    remainingPreparationTime: number;
     totalPrice: number;
     menu: IMenuItem;
 }

@@ -1,14 +1,22 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardHeader, Link, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useOrder } from "../../hooks/useOrder";
+import { Timer } from "../Timer/Timer";
 import { OrderItem } from "./OrderItem";
+import { OrderItemStatus } from "./OrderItemStatus";
 
 export const Order = () => {
+    const navigate = useNavigate();
+
     const { order, place, getById, complete } = useOrder();
     const { orderId } = useParams();
-    const navigate = useNavigate();
+
     const [isBillout, setIsBillout] = useState(false);
+    const [showStatus, setShowStatus] = useState(false);
+
+    const [remainingTime, setRemainingTime] = useState(0);
+
 
     useEffect(() => {
         if(orderId) getById!(+orderId);
@@ -17,15 +25,18 @@ export const Order = () => {
     useEffect(() => {
         if(!order) navigate("/");
         else navigate(`/${order.id}`);
+        if(order) setRemainingTime(() => order.remainingPreparationTime + order.remainingCookingTime);
     }, [order]);
 
-    const renderStatus = (status: number) => {
-        if(!order?.orderItems?.length) return "Select from the menu to start..."
+    const renderStatus = () => {
+        if(!order) return "Place an order to start...";
+        if(order?.orderItems?.length == 0) return "Select an item from the menu..."
 
-        switch(status) {
-            case 0: return "Preparing...";
-            case 1: return "Cooking...";
-            case 2: return "Served...";
+        switch(order.status) {
+            case 1: return `Preparing...`; 
+            case 2: return `Cooking...`;
+            case 3:
+            case 4: return "Completed...";
             default: return "Error";
         }
     };
@@ -37,21 +48,30 @@ export const Order = () => {
 
     return (
         <Card sx={{minWidth: 275}}>
-            <CardHeader title="Table #1" />
+            <CardHeader title={renderStatus()}/>
             <CardContent>
                 {
                     !order && 
-                    <Button type={"submit"} sx={{width:1}} variant="contained" onClick={() => place!()}>
+                    <Button fullWidth onClick={() => place!()}>
                         Place Order
                     </Button>
                 }
-                { 
-                    isBillout &&
-                    order?.orderItems.map(item => <div key={item.id}><OrderItem {...item} /></div>)
-                }
                 {
                     order && !isBillout &&
-                    <Typography variant="body1">{renderStatus(order?.status)}</Typography>
+                    <div>
+                        <Typography variant="subtitle1"><Timer duration={remainingTime} /></Typography>
+                    </div>
+                }
+                { 
+                    (isBillout || showStatus) &&
+                    order?.orderItems.map(item => 
+                        {
+                            return <div key={item.id}>
+                                {showStatus && <OrderItemStatus {...item} />}
+                                {isBillout && <OrderItem {...item} />}
+                            </div>;
+                        }
+                    )
                 }
                 {
                     order && isBillout &&
@@ -73,7 +93,19 @@ export const Order = () => {
             </CardContent>
             {
                 order?.orderItems && order?.orderItems?.length > 0 && 
-                <CardActions>
+                <CardActions className="orderCommands">
+                    {
+                        order && order.orderItems.length > 0 && !isBillout && !showStatus &&
+                        <Button fullWidth onClick={() => setShowStatus(true)}>
+                            Show Order Details
+                        </Button>
+                    }
+                    {
+                        order && !isBillout && showStatus &&
+                        <Button fullWidth onClick={() => setShowStatus(false)}>
+                            Hide Order Details
+                        </Button>
+                    }
                     {
                         isBillout &&
                         <Button sx={{width:1}} variant="contained" onClick={onCompleteOrder}>
