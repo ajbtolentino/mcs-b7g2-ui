@@ -1,13 +1,11 @@
 import { Button, Card, CardActions, CardContent, CardHeader, Link, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import { useOrder } from "../../hooks/useOrder";
 import { IOrderItem } from "../../models/IOrderItem";
-import { OrderItemPlaced } from "./OrderItemPlaced";
+import { OrderItemPlaced } from "./OrderItemPending";
 
-export const PlaceOrder = () => {
+export const PendingOrders = () => {
     const { order, loading, place } = useOrder();
-
     const [showPlaceOrder, setShowPlaceOrder] = useState<boolean>(false);
     const [pendingOrders, setPendingOrders] = useState<IOrderItem[]>([]);
 
@@ -15,7 +13,7 @@ export const PlaceOrder = () => {
         if(order) {
             const orderItems = order.orderItems ?? [];
         
-            setPendingOrders(orderItems.filter(_ => !_.isPlaced));
+            setPendingOrders(orderItems.filter(_ => _.status === 1));
         }
     }, [order]);
 

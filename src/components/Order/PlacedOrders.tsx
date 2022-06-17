@@ -1,14 +1,12 @@
 import { Button, Card, CardActions, CardContent, CardHeader, Link, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import { useOrder } from "../../hooks/useOrder";
 import { IOrderItem } from "../../models/IOrderItem";
 import { Timer } from "../Timer/Timer";
-import { OrderItem } from "./OrderItem";
-import { OrderItemPlaced } from "./OrderItemPlaced";
-import { OrderItemStatus } from "./OrderItemStatus";
+import { PlacedOrderItem } from "./PlacedOrderItem";
+import { OrderItemStatus } from "./OrderItemPlacedStatus";
 
-export const Order = () => {
+export const PlacedOrders = () => {
     const { order, loading, complete } = useOrder();
     const [isBillout, setIsBillout] = useState(false);
     const [placedOrders, setPlacedOrders] = useState<IOrderItem[]>([]);
@@ -20,27 +18,13 @@ export const Order = () => {
             
             const orderItems = order.orderItems ?? [];
         
-            setPlacedOrders(orderItems.filter(_ => _.isPlaced));
+            setPlacedOrders(orderItems.filter(_ => _.status !== 1));
         }
         else {
             setRemainingTime(0);
             setPlacedOrders([]);
         }
     }, [order, loading]);
-
-    const renderStatus = () => {
-        if(loading) return "Please wait...";
-        if(!order) return "Place an order to start...";
-        if(order?.orderItems?.length == 0) return "Select an item from the menu..."
-        
-        switch(order.status) {
-            case 1: return `Preparing...`; 
-            case 2: return `Cooking...`;
-            case 3:
-            case 4: return "Completed...";
-            default: return "Error";
-        }
-    };
 
     const onCompleteOrder = () => {
         setIsBillout(false);
@@ -62,7 +46,7 @@ export const Order = () => {
                         {
                             return <div key={item.id}>
                                 {!isBillout && <OrderItemStatus {...item} />}
-                                {isBillout && <OrderItem {...item} />}
+                                {isBillout && <PlacedOrderItem {...item} />}
                             </div>;
                         }
                     )

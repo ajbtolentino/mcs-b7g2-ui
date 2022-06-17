@@ -5,8 +5,8 @@ import { useMenu } from "../hooks/useMenu";
 import { useOrder } from "../hooks/useOrder";
 import { ChefRecommended } from "./Menu/ChefRecommended";
 import { Menu } from "./Menu/Menu";
-import { Order } from "./Order/Order";
-import { PlaceOrder } from "./Order/PlaceOrder";
+import { PlacedOrders } from "./Order/PlacedOrders";
+import { PendingOrders } from "./Order/PendingOrders";
 
 export const Dashboard = () => {
     const { errors: menuErrors } = useMenu();
@@ -47,10 +47,10 @@ export const Dashboard = () => {
                     <ChefRecommended />
                 </Box>
                 <Box className="order">
-                    <PlaceOrder  />
+                    <PendingOrders  />
                 </Box>
                 <Box className="order">
-                    <Order  />
+                    <PlacedOrders  />
                 </Box>
             </div>
             <div className="menu container">
