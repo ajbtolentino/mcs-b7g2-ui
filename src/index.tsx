@@ -17,7 +17,6 @@ ReactDOM.render(
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<App />} />
-            <Route path="/:orderId" element={<App />} />
             <Route path="*" element={<NotFound />}/>
           </Routes>
         </BrowserRouter>

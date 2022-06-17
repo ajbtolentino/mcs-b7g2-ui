@@ -5,10 +5,11 @@ import { Timer } from "../Timer/Timer"
 export const OrderItemStatus: React.FC<IOrderItem> = (props: IOrderItem) => {
     const renderStatus = (status: number) => {
         switch(status) {
-            case 1: return `Preparing...`; 
-            case 2: return `Cooking...`;
-            case 3:
-            case 4: return "Completed...";
+            case 1: return `Pending...`; 
+            case 2: return `Preparing...`; 
+            case 3: return `Cooking...`;
+            case 3: 
+            case 5: return "Completed...";
             default: return "Error";
         }
     };

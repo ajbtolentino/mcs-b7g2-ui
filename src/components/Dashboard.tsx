@@ -6,13 +6,18 @@ import { useOrder } from "../hooks/useOrder";
 import { ChefRecommended } from "./Menu/ChefRecommended";
 import { Menu } from "./Menu/Menu";
 import { Order } from "./Order/Order";
+import { PlaceOrder } from "./Order/PlaceOrder";
 
 export const Dashboard = () => {
     const { errors: menuErrors } = useMenu();
-    const { order } = useOrder();
+    const { order, getByTableNumber } = useOrder();
 
     const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
     const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+
+    useEffect(() => {
+        getByTableNumber!(1);
+    }, []);
     
     useEffect(() => {
       setShowSnackbar(menuErrors.length > 0);
@@ -38,12 +43,12 @@ export const Dashboard = () => {
 
         <div className="dashboard container">
             <div className="left container">
-                {
-                    order && 
-                    <Box className="recommended">
-                        <ChefRecommended />
-                    </Box>
-                }
+                <Box className="recommended">
+                    <ChefRecommended />
+                </Box>
+                <Box className="order">
+                    <PlaceOrder  />
+                </Box>
                 <Box className="order">
                     <Order  />
                 </Box>

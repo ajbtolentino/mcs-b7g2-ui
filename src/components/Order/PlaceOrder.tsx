@@ -1,43 +1,55 @@
-import { Button, Card, CardContent, Grid, TextField, Typography } from "@mui/material";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Button, Card, CardActions, CardContent, CardHeader, Link, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useOrder } from "../../hooks/useOrder";
+import { IOrderItem } from "../../models/IOrderItem";
+import { OrderItemPlaced } from "./OrderItemPlaced";
 
 export const PlaceOrder = () => {
-    const [name, setName] = useState<string>("");
+    const { order, loading, place } = useOrder();
 
-    const navigate = useNavigate();
+    const [showPlaceOrder, setShowPlaceOrder] = useState<boolean>(false);
+    const [pendingOrders, setPendingOrders] = useState<IOrderItem[]>([]);
 
-    const onChangeTextHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setName(e.target.value);
-    };
-
-    const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    useEffect(() => {
+        if(order) {
+            const orderItems = order.orderItems ?? [];
         
-        
-    };
+            setPendingOrders(orderItems.filter(_ => !_.isPlaced));
+        }
+    }, [order]);
+
+    useEffect(() => {
+        setShowPlaceOrder(pendingOrders.length > 0)
+    }, [pendingOrders]);
 
     return (
-    <form onSubmit={onFormSubmit}>
-        <div className="enter container">
-            <Card className="wrapper">
-                <CardContent>
-                    <Grid container flexDirection={"column"} spacing={2}>
-                        <Grid item>
-                            <Typography textAlign={"center"} variant="h4" component="div">Welcome to our system!</Typography>
-                        </Grid>
-                        <Grid item>
-                            <TextField required fullWidth onChange={e => setName(e.target.value)} label="Enter your name..." variant="standard"/>
-                        </Grid>
-                        <Grid item>
-                            <Button type={"submit"} sx={{width:1}} variant="contained" onClick={() => navigate("/dashboard")}>
-                                Place Order
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </CardContent>
-            </Card>
-        </div>
-    </form>
-    )
+        <Card sx={{minWidth: 275}}>
+            <CardHeader title="Place Order"/>
+            <CardContent>
+                {
+                    loading && <Typography variant="subtitle1">Loading...</Typography>
+                }
+                { 
+                    !loading && pendingOrders.map(item => 
+                        {
+                            return <div key={item.id}><OrderItemPlaced {...item} /></div>;
+                        }
+                    )
+                }
+                {
+                    !loading && pendingOrders.length == 0 &&
+                    <Typography variant="subtitle1">No pending orders</Typography>
+                }
+            </CardContent>
+            {
+                showPlaceOrder && 
+                <CardActions className="orderCommands">
+                    <Button fullWidth onClick={() => place!()}>
+                        Place
+                    </Button>
+                </CardActions>
+            }
+        </Card>
+    );
 };

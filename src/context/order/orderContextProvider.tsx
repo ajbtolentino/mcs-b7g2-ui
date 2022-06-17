@@ -3,14 +3,16 @@ import { useState } from "react";
 import { IOrder } from "../../models/IOrder";
 import { OrderContext } from "./orderContext";
 
-const GET_BY_ID_URL = (orderId: number): string => `/Order/Get?orderId=${orderId}`;
-const PLACE_ORDER_URL = (tableNumber: number, customerName: string) => `/Order/Place?tableNumber=${tableNumber}&customerName=${customerName}`;
-const COMPLETE_URL = (orderId: number) => `/Order/Complete?orderId=${orderId}`;
-const ADD_RECOMMENDED_URL = (orderId: number, category: number): string => `/Order/AddChefRecommended?orderId=${orderId}&category=${category}`;
-const ADD_ORDER_ITEM_URL = (orderId: number, menuId: number, quantity: number): string => `/Order/AddOrderItem?orderId=${orderId}&menuId=${menuId}&quantity=${quantity}`;
-const DELETE_URL = (orderId: number): string => `/Order/Cancel?orderId${orderId}`;
+const GET_BY_TABLE_NUMBER = (tableNumber: number): string => `/Order/GetByTableNumber?tableNumber=${tableNumber}`;
+const PLACE_ORDER_URL = (tableNumber: number) => `/Order/Place?tableNumber=${tableNumber}`;
+const COMPLETE_URL = (tableNumber: number) => `/Order/Complete?tableNumber=${tableNumber}`;
+const ADD_RECOMMENDED_URL = (tableNumber: number, category: number): string => `/Order/AddChefRecommended?tableNumber=${tableNumber}&category=${category}`;
+const ADD_ORDER_ITEM_URL = (tableNumber: number, menuId: number, quantity: number): string => `/Order/AddOrderItem?tableNumber=${tableNumber}&menuId=${menuId}&quantity=${quantity}`;
+const CANCEL_ITEM_URL = (orderItemId: number): string => `/OrderItem/Cancel?orderItemId=${orderItemId}`;
 
 export const OrderContextProvider: React.FC<{}> = (props) => {
+    const TABLE_NUMBER = 1;
+
     const [order, setOrder] = useState<IOrder>();
     const [loading, setLoading] = useState<boolean>(false);
     const [errors, setErrors] = useState<string[]>([]);
@@ -19,12 +21,12 @@ export const OrderContextProvider: React.FC<{}> = (props) => {
         setErrors(["Something went wrong. Please try again."]);
     };
 
-    const getById = async (orderId: number) => {
+    const getByTableNumber = async (tableNumber: number) => {
         try {
             setErrors([]);
             setLoading(true);
 
-            const response = await axios.get<IOrder>(GET_BY_ID_URL(orderId));
+            const response = await axios.get<IOrder>(GET_BY_TABLE_NUMBER(tableNumber));
 
             setOrder(response.data);
         } catch (err: any) {
@@ -39,7 +41,7 @@ export const OrderContextProvider: React.FC<{}> = (props) => {
             setErrors([]);
             setLoading(true);
 
-            const response = await axios.post<IOrder>(PLACE_ORDER_URL(1, "test"),
+            const response = await axios.post<IOrder>(PLACE_ORDER_URL(order?.tableNumber ?? TABLE_NUMBER),
             {
                 headers: { "Content-Type": "application/json" }
             });
@@ -57,7 +59,7 @@ export const OrderContextProvider: React.FC<{}> = (props) => {
             setErrors([]);
             setLoading(true);
 
-            await axios.post(COMPLETE_URL(order?.id ?? 0),
+            await axios.post(COMPLETE_URL(order?.tableNumber ?? TABLE_NUMBER),
             {
                 headers: { "Content-Type": "application/json" }
             });
@@ -75,16 +77,18 @@ export const OrderContextProvider: React.FC<{}> = (props) => {
             setErrors([]);
             setLoading(true);
 
-            await axios.put(ADD_ORDER_ITEM_URL(order?.id ?? 0, menuId, quantity),
+            var response = await axios.put(ADD_ORDER_ITEM_URL(order?.tableNumber ?? TABLE_NUMBER, menuId, quantity),
             {
                 headers: { "Content-Type": "application/json" }
             });
+
+            setOrder(response.data);
         } catch (err: any) {
             handleError(err);
         } finally {
             setLoading(false);
 
-            getById(order?.id ?? 0);
+            if(order) getByTableNumber(order.tableNumber ?? TABLE_NUMBER);
         }
     };
 
@@ -93,22 +97,24 @@ export const OrderContextProvider: React.FC<{}> = (props) => {
             setErrors([]);
             setLoading(true);
 
-            await axios.put(ADD_RECOMMENDED_URL(order?.id ?? 0, category));
+            const response = await axios.put(ADD_RECOMMENDED_URL(order?.tableNumber ?? TABLE_NUMBER, category));
+
+            setOrder(response.data);
         } catch (err: any) {
             handleError(err);
         } finally {
             setLoading(false);
 
-            getById(order?.id ?? 0);
+            if(order) getByTableNumber(order.tableNumber ?? TABLE_NUMBER);
         }
     }
 
-    const cancel = async () => {
+    const cancelItem = async (orderItemId: number) => {
         try {
             setErrors([]);
             setLoading(true);
 
-            await axios.delete(DELETE_URL(order?.id ?? 0),
+            await axios.delete(CANCEL_ITEM_URL(orderItemId),
             {
                 headers: { "Content-Type": "application/json" }
             });
@@ -116,6 +122,8 @@ export const OrderContextProvider: React.FC<{}> = (props) => {
             handleError(err);
         } finally {
             setLoading(false);
+
+            if(order) getByTableNumber(order.tableNumber ?? TABLE_NUMBER);
         }
     };
       
@@ -125,10 +133,10 @@ export const OrderContextProvider: React.FC<{}> = (props) => {
                 order: order,
                 loading: loading,
                 errors: errors,
-                getById: getById,
+                getByTableNumber: getByTableNumber,
                 place: place,
                 complete: complete,
-                cancel: cancel,
+                cancelItem: cancelItem,
                 addOrderItem: addOrderItem,
                 addRecommended: addRecommended
             }}>

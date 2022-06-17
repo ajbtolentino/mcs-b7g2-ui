@@ -8,5 +8,6 @@ export interface IOrderItem {
     remainingCookingTime: number;
     remainingPreparationTime: number;
     totalPrice: number;
+    isPlaced: boolean;
     menu: IMenuItem;
 }

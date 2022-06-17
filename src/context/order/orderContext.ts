@@ -5,10 +5,10 @@ interface IOrderContext {
     order?: IOrder;
     loading: boolean;
     errors: string[];
-    getById?: (orderId: number) => Promise<void>;
+    getByTableNumber?: (tableNumber: number) => Promise<void>;
     complete?: () => Promise<void>;
     place?: () => Promise<void>;
-    cancel?: () => Promise<void>;
+    cancelItem?: (orderItemId: number) => Promise<void>;
     addOrderItem?: (menuId: number, quantity: number) => Promise<void>;
     addRecommended?: (category: number) => Promise<void>;
 };

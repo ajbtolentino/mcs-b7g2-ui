@@ -2,36 +2,37 @@ import { Button, Card, CardActions, CardContent, CardHeader, Link, Typography } 
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useOrder } from "../../hooks/useOrder";
+import { IOrderItem } from "../../models/IOrderItem";
 import { Timer } from "../Timer/Timer";
 import { OrderItem } from "./OrderItem";
+import { OrderItemPlaced } from "./OrderItemPlaced";
 import { OrderItemStatus } from "./OrderItemStatus";
 
 export const Order = () => {
-    const navigate = useNavigate();
-
-    const { order, place, getById, complete } = useOrder();
-    const { orderId } = useParams();
-
+    const { order, loading, complete } = useOrder();
     const [isBillout, setIsBillout] = useState(false);
-    const [showStatus, setShowStatus] = useState(false);
-
+    const [placedOrders, setPlacedOrders] = useState<IOrderItem[]>([]);
     const [remainingTime, setRemainingTime] = useState(0);
 
-
     useEffect(() => {
-        if(orderId) getById!(+orderId);
-    }, [orderId]);
-
-    useEffect(() => {
-        if(!order) navigate("/");
-        else navigate(`/${order.id}`);
-        if(order) setRemainingTime(() => order.remainingPreparationTime + order.remainingCookingTime);
-    }, [order]);
+        if(order) {
+            setRemainingTime(() => order.remainingPreparationTime + order.remainingCookingTime);
+            
+            const orderItems = order.orderItems ?? [];
+        
+            setPlacedOrders(orderItems.filter(_ => _.isPlaced));
+        }
+        else {
+            setRemainingTime(0);
+            setPlacedOrders([]);
+        }
+    }, [order, loading]);
 
     const renderStatus = () => {
+        if(loading) return "Please wait...";
         if(!order) return "Place an order to start...";
         if(order?.orderItems?.length == 0) return "Select an item from the menu..."
-
+        
         switch(order.status) {
             case 1: return `Preparing...`; 
             case 2: return `Cooking...`;
@@ -48,22 +49,16 @@ export const Order = () => {
 
     return (
         <Card sx={{minWidth: 275}}>
-            <CardHeader title={renderStatus()}/>
+            <CardHeader title="Your Bill"/>
             <CardContent>
                 {
-                    !order && 
-                    <Button fullWidth onClick={() => place!()}>
-                        Place Order
-                    </Button>
+                    loading && <Typography variant="subtitle1">Loading...</Typography>
                 }
                 {
-                    order && !isBillout &&
-                    <div>
-                        <Typography variant="subtitle1"><Timer duration={remainingTime} /></Typography>
-                    </div>
+                    !loading && placedOrders.length == 0 && <Typography variant="subtitle1">No orders placed</Typography>
                 }
                 { 
-                    order?.orderItems.map(item => 
+                    !loading && placedOrders.map(item => 
                         {
                             return <div key={item.id}>
                                 {!isBillout && <OrderItemStatus {...item} />}
@@ -73,7 +68,13 @@ export const Order = () => {
                     )
                 }
                 {
-                    order && isBillout &&
+                    !loading && order && !isBillout &&
+                    <div>
+                        <Typography variant="subtitle1"><Timer duration={remainingTime} /></Typography>
+                    </div>
+                }
+                {
+                    !loading && order && isBillout &&
                     <div  className="orderItem totalBill">
                         <div className="billPrice">
                             <Typography variant="caption">Inclusive Tax</Typography>
@@ -91,16 +92,21 @@ export const Order = () => {
                 }
             </CardContent>
             {
-                order?.orderItems && order?.orderItems?.length > 0 && 
+                placedOrders.length > 0 && 
                 <CardActions className="orderCommands">
                     {
-                        isBillout &&
+                        !loading && isBillout &&
+                        <Button sx={{width:1}} variant="contained" onClick={() => setIsBillout(false)}>
+                            Go back
+                        </Button>
+                    }                    {
+                        !loading && isBillout &&
                         <Button sx={{width:1}} variant="contained" onClick={onCompleteOrder}>
                             Complete Order
                         </Button>
                     }
                     {
-                        !isBillout &&
+                        !loading && !isBillout &&
                         <Button sx={{width:1}} variant="contained" onClick={() => setIsBillout(true)}>
                             Bill-out
                         </Button>

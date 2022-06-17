@@ -63,12 +63,9 @@ export const MenuItem: React.FC<IMenuItem> = (props: IMenuItem) => {
                     </Typography>
                 </div>
             </CardContent>
-            {
-                order &&
-                <CardActions>
-                    <Button variant="contained" fullWidth onClick={() => addOrderItem!(props.id, 1)}>Add</Button>
-                </CardActions>
-            }
+            <CardActions>
+                <Button variant="contained" fullWidth onClick={() => addOrderItem!(props.id, 1)}>Add</Button>
+            </CardActions>
         </Card>
     )
 }
