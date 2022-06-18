@@ -25,11 +25,8 @@ export const PendingOrders = () => {
         <Card sx={{minWidth: 275}}>
             <CardHeader title="Place Order"/>
             <CardContent>
-                {
-                    loading && <Typography variant="subtitle1">Loading...</Typography>
-                }
                 { 
-                    !loading && pendingOrders.map(item => 
+                    pendingOrders.map(item => 
                         {
                             return <div key={item.id}><OrderItemPlaced {...item} /></div>;
                         }
@@ -39,11 +36,14 @@ export const PendingOrders = () => {
                     !loading && pendingOrders.length == 0 &&
                     <Typography variant="subtitle1">No pending orders</Typography>
                 }
+                {
+                    loading && <Typography variant="subtitle1">Loading...</Typography>
+                }
             </CardContent>
             {
                 showPlaceOrder && 
                 <CardActions className="orderCommands">
-                    <Button fullWidth onClick={() => place!()}>
+                    <Button disabled={loading} fullWidth onClick={() => place!()}>
                         Place
                     </Button>
                 </CardActions>

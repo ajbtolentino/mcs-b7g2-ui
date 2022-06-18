@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, Tooltip, Typography } from "@mui/material"
+import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, TextField, Tooltip, Typography } from "@mui/material"
 import { IMenuItem } from "../../models/IMenuItem"
 import WhatshotOutlinedIcon from '@mui/icons-material/WhatshotOutlined';
 import FreeBreakfastIcon from '@mui/icons-material/FreeBreakfast';
@@ -9,9 +9,11 @@ import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import OutdoorGrillIcon from '@mui/icons-material/OutdoorGrill';
 import { useOrder } from "../../hooks/useOrder";
+import { useState } from "react";
 
 export const MenuItem: React.FC<IMenuItem> = (props: IMenuItem) => {
     const { order, addOrderItem } = useOrder();
+    const [quantity, setQuantity] = useState<number>(0);
 
     const renderCategory = () => {
         switch(props.category) {
@@ -49,7 +51,7 @@ export const MenuItem: React.FC<IMenuItem> = (props: IMenuItem) => {
                     <Typography variant="body2">{props.description}</Typography>  
                 </div>
                 <div className="price">
-                    <Typography variant="body2">{props.itemPrice}</Typography>  
+                    <Typography variant="body2">{Intl.NumberFormat('en-US', {style:"currency", currency: "Php"}).format(props.itemPrice)}</Typography>  
                 </div>
                 <div className="details">
                     <Typography variant="caption" color="text.secondary">
@@ -59,12 +61,13 @@ export const MenuItem: React.FC<IMenuItem> = (props: IMenuItem) => {
                         <Tooltip title="Preparation Time"><span><AccessTimeIcon fontSize="small" /> {props.prepTimeInSec}</span></Tooltip>
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
-                        <Tooltip title="Preparation Time"><span><OutdoorGrillIcon fontSize="small" /> {props.cookTimeInSec}</span></Tooltip>
+                        <Tooltip title="Cooking Time"><span><OutdoorGrillIcon fontSize="small" /> {props.cookTimeInSec}</span></Tooltip>
                     </Typography>
                 </div>
             </CardContent>
             <CardActions>
-                <Button variant="contained" fullWidth onClick={() => addOrderItem!(props.id, 1)}>Add</Button>
+                <TextField className="menuQuantity" size="small" type="number" InputLabelProps={{shrink:true}} onChange={(e) => setQuantity(+e.target.value >= 0 ? +e.target.value : 0)} value={quantity} />
+                <Button variant="contained" disabled={quantity === 0} fullWidth onClick={() => addOrderItem!(props.id, quantity)}>Add</Button>
             </CardActions>
         </Card>
     )

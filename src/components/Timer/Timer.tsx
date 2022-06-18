@@ -1,7 +1,6 @@
-import { duration } from "@mui/material";
 import { useEffect, useState } from "react"
 
-export const Timer = (props: {duration: number}) => {
+export const Timer = (props: {duration: number, callback?: () => void}) => {
     const [counter, setCounter] = useState(props.duration);
 
     useEffect(() => {
@@ -11,6 +10,8 @@ export const Timer = (props: {duration: number}) => {
     useEffect(() => {
         const timer = setTimeout(() => setCounter(() => counter - 1), 1000);
 
+        if(counter === 0 && props.callback) props.callback();
+
         return () => clearInterval(timer);
     }, [counter]);
 
@@ -19,17 +20,15 @@ export const Timer = (props: {duration: number}) => {
             {
                 counter > 0 &&
                 <>
-                {
-                    counter <= 60 && <>{Math.round(counter)} seconds </>
-                }
-                {
-                    counter > 3600 && <>{Math.round(counter / 3600)} hours </>
-                }
-                {
-                    counter > 60 && <>{Math.round(counter / 60)} minutes </>
-                }
-
-                remaining
+                    {
+                        <>{(Math.floor(counter / 3600) % 60).toLocaleString("en-US", {minimumIntegerDigits: 2})}:</>
+                    }
+                    {
+                        <>{Math.floor((counter / 60) % 60).toLocaleString("en-US", {minimumIntegerDigits: 2})}:</>
+                    }
+                    {
+                        <>{Math.floor(counter % 60).toLocaleString("en-US", {minimumIntegerDigits: 2})} </>
+                    }
                 </>
             }
         </>

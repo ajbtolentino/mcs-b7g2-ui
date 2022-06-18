@@ -157,11 +157,35 @@ body {
     justify-content: space-between;
 }
 
+.orderItemStatus .menuName {
+    text-align: left !important;
+    flex-shrink: 1 !important;
+}
+
+.orderItemTimer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.menuQuantity {
+    margin-right: 5px !important;
+}
+
+.menuQuantity .Mui-focused {
+    border-color: #982121 !important;
+}
+
+.menuQuantity input {
+    width: 100px;
+    color: #982121 !important;
+}
+
 .left .totalBill .billPrice.totalBillPrice {
     border-top: 2px solid #982121 !important;
 }
 
 .left .MuiTypography-root {
+    flex-shrink: 0;
     text-align: center;
 }
 
@@ -173,4 +197,12 @@ body {
 .MuiPaper-root button {
     background-color: #982121 !important;
     color: white;
+}
+
+.MuiPaper-root button:disabled {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.MuiCardContent-root:last-child {
+    padding-bottom: 16px !important;
 }

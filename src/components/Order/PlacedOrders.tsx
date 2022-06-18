@@ -14,7 +14,7 @@ export const PlacedOrders = () => {
 
     useEffect(() => {
         if(order) {
-            setRemainingTime(() => order.remainingPreparationTime + order.remainingCookingTime);
+            setRemainingTime(order.remainingPreparationTime + order.remainingCookingTime);
             
             const orderItems = order.orderItems ?? [];
         
@@ -52,9 +52,9 @@ export const PlacedOrders = () => {
                     )
                 }
                 {
-                    !loading && order && !isBillout &&
+                    !loading && order && !isBillout && remainingTime > 0 && 
                     <div>
-                        <Typography variant="subtitle1"><Timer duration={remainingTime} /></Typography>
+                        <Typography variant="subtitle1">Orders served in <Timer duration={remainingTime} /></Typography>
                     </div>
                 }
                 {
@@ -62,15 +62,15 @@ export const PlacedOrders = () => {
                     <div  className="orderItem totalBill">
                         <div className="billPrice">
                             <Typography variant="caption">Inclusive Tax</Typography>
-                            <Typography variant="caption">{order?.inclusiveTax}</Typography>
+                            <Typography variant="caption">{Intl.NumberFormat('en-US', {style:"currency", currency: "Php"}).format(order?.inclusiveTax)}</Typography>
                         </div>
                         <div className="billPrice">
                             <Typography variant="caption">Service Charge</Typography>
-                            <Typography variant="caption">{order?.serviceCharge}</Typography>
+                            <Typography variant="caption">{Intl.NumberFormat('en-US', {style:"currency", currency: "Php"}).format(order?.serviceCharge)}</Typography>
                         </div>
                         <div className="billPrice totalBillPrice">
                             <Typography variant="caption">Total Bill</Typography>
-                            <Typography variant="caption">{order?.totalBill}</Typography>
+                            <Typography variant="caption">{Intl.NumberFormat('en-US', {style:"currency", currency: "Php"}).format(order?.totalBill)}</Typography>
                         </div>
                     </div>
                 }
