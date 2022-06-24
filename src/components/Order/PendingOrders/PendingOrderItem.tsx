@@ -1,8 +1,8 @@
 import { Button, Card, CardActions, CardContent, Typography } from "@mui/material"
-import { useOrder } from "../../hooks/useOrder";
-import { IOrderItem } from "../../models/IOrderItem"
+import { useOrder } from "../../../hooks/useOrder";
+import { IOrderItem } from "../../../models/IOrderItem";
 
-export const OrderItemPlaced: React.FC<IOrderItem> = (props: IOrderItem) => {
+export const PendingOrderItem: React.FC<IOrderItem> = (props: IOrderItem) => {
     const { loading, cancelItem } = useOrder();
 
     return (

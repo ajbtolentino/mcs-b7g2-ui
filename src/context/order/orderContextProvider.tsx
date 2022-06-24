@@ -1,5 +1,5 @@
-import axios from "axios";
-import { useState } from "react";
+import axios, { CancelTokenSource } from "axios";
+import { useRef, useState } from "react";
 import { IOrder } from "../../models/IOrder";
 import { OrderContext } from "./orderContext";
 
@@ -7,30 +7,41 @@ const GET_BY_TABLE_NUMBER = (tableNumber: number): string => `/Order/GetByTableN
 const PLACE_ORDER_URL = (tableNumber: number) => `/Order/Place?tableNumber=${tableNumber}`;
 const COMPLETE_URL = (tableNumber: number) => `/Order/Complete?tableNumber=${tableNumber}`;
 const ADD_RECOMMENDED_URL = (tableNumber: number, category: number): string => `/Order/AddChefRecommended?tableNumber=${tableNumber}&category=${category}`;
+const ADD_ALL_RECOMMENDED_URL = (tableNumber: number): string => `/Order/AddAllChefRecommendation?tableNumber=${tableNumber}`;
 const ADD_ORDER_ITEM_URL = (tableNumber: number, menuId: number, quantity: number): string => `/Order/AddOrderItem?tableNumber=${tableNumber}&menuId=${menuId}&quantity=${quantity}`;
-const CANCEL_ITEM_URL = (orderItemId: number): string => `/OrderItem/Cancel?orderItemId=${orderItemId}`;
+const CANCEL_ITEM_URL = (orderItemId: number): string => `/Order/CancelOrderItem?orderItemId=${orderItemId}`;
 
 export const OrderContextProvider: React.FC<{}> = (props) => {
-    const TABLE_NUMBER = 1;
+    const TABLE = process.env.REACT_APP_TABLE_NUMBER ?? "1";
+    const TABLE_NUMBER = +TABLE;
 
+    const [isBillout, setIsBillout] = useState<boolean>(false);
     const [order, setOrder] = useState<IOrder>();
     const [loading, setLoading] = useState<boolean>(false);
     const [errors, setErrors] = useState<string[]>([]);
 
+    const cancelTokenSource = useRef<CancelTokenSource>();
+
     const handleError = (err: any) => {
-        setErrors(["Something went wrong. Please try again."]);
+        if(err.response.data.detail) setErrors([err.response.data.detail]);
+        else setErrors([err.response.data]);
     };
 
-    const getByTableNumber = async (tableNumber: number) => {
+    const getByTableNumber = async () => {
         try {
             setErrors([]);
             setLoading(true);
 
-            const response = await axios.get<IOrder>(GET_BY_TABLE_NUMBER(tableNumber));
+            if(cancelTokenSource?.current?.cancel) cancelTokenSource.current.cancel();
+
+            cancelTokenSource.current = axios.CancelToken.source();
+            const response = await axios.get<IOrder>(GET_BY_TABLE_NUMBER(TABLE_NUMBER), {
+                cancelToken: cancelTokenSource.current.token
+            });
 
             setOrder(response.data);
         } catch (err: any) {
-            handleError(err);
+            if(err.response?.status !== 404) handleError(err);
         } finally {
             setLoading(false);
         }
@@ -41,7 +52,7 @@ export const OrderContextProvider: React.FC<{}> = (props) => {
             setErrors([]);
             setLoading(true);
 
-            const response = await axios.post<IOrder>(PLACE_ORDER_URL(order?.tableNumber ?? TABLE_NUMBER),
+            const response = await axios.post<IOrder>(PLACE_ORDER_URL(TABLE_NUMBER),
             {
                 headers: { "Content-Type": "application/json" }
             });
@@ -51,6 +62,7 @@ export const OrderContextProvider: React.FC<{}> = (props) => {
             handleError(err);
         } finally {
             setLoading(false);
+            setIsBillout(false);
         }
     };
 
@@ -59,12 +71,12 @@ export const OrderContextProvider: React.FC<{}> = (props) => {
             setErrors([]);
             setLoading(true);
 
-            await axios.post(COMPLETE_URL(order?.tableNumber ?? TABLE_NUMBER),
+            const response = await axios.post<IOrder>(COMPLETE_URL(TABLE_NUMBER),
             {
                 headers: { "Content-Type": "application/json" }
             });
 
-            setOrder(undefined);
+            setOrder(response.data);
         } catch (err: any) {
             handleError(err);
         } finally {
@@ -77,7 +89,7 @@ export const OrderContextProvider: React.FC<{}> = (props) => {
             setErrors([]);
             setLoading(true);
 
-            var response = await axios.put(ADD_ORDER_ITEM_URL(order?.tableNumber ?? TABLE_NUMBER, menuId, quantity),
+            var response = await axios.put(ADD_ORDER_ITEM_URL(TABLE_NUMBER, menuId, quantity),
             {
                 headers: { "Content-Type": "application/json" }
             });
@@ -88,7 +100,7 @@ export const OrderContextProvider: React.FC<{}> = (props) => {
         } finally {
             setLoading(false);
 
-            if(order) getByTableNumber(order.tableNumber ?? TABLE_NUMBER);
+            setIsBillout(false);
         }
     };
 
@@ -97,7 +109,7 @@ export const OrderContextProvider: React.FC<{}> = (props) => {
             setErrors([]);
             setLoading(true);
 
-            const response = await axios.put(ADD_RECOMMENDED_URL(order?.tableNumber ?? TABLE_NUMBER, category));
+            const response = await axios.put(ADD_RECOMMENDED_URL(TABLE_NUMBER, category));
 
             setOrder(response.data);
         } catch (err: any) {
@@ -105,9 +117,24 @@ export const OrderContextProvider: React.FC<{}> = (props) => {
         } finally {
             setLoading(false);
 
-            if(order) getByTableNumber(order.tableNumber ?? TABLE_NUMBER);
+            setIsBillout(false);
         }
-    }
+    };
+
+    const addAllRecommended = async () => {
+        try {
+            setErrors([]);
+            setLoading(true);
+
+            const response = await axios.put(ADD_ALL_RECOMMENDED_URL(TABLE_NUMBER));
+
+            setOrder(response.data);
+        } catch (err: any) {
+            handleError(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const cancelItem = async (orderItemId: number) => {
         try {
@@ -118,13 +145,19 @@ export const OrderContextProvider: React.FC<{}> = (props) => {
             {
                 headers: { "Content-Type": "application/json" }
             });
+
+            getByTableNumber();
         } catch (err: any) {
             handleError(err);
         } finally {
             setLoading(false);
 
-            if(order) getByTableNumber(order.tableNumber ?? TABLE_NUMBER);
+            setIsBillout(false);
         }
+    };
+
+    const toggleBillout = () => {
+        setIsBillout(!isBillout);
     };
       
     return(
@@ -133,12 +166,15 @@ export const OrderContextProvider: React.FC<{}> = (props) => {
                 order: order,
                 loading: loading,
                 errors: errors,
+                isBillout: isBillout,
                 getByTableNumber: getByTableNumber,
                 place: place,
                 complete: complete,
                 cancelItem: cancelItem,
                 addOrderItem: addOrderItem,
-                addRecommended: addRecommended
+                addRecommended: addRecommended,
+                addAllRecommended: addAllRecommended,
+                toggleBillout: toggleBillout
             }}>
                 {props.children}
         </OrderContext.Provider>

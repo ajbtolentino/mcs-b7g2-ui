@@ -1,14 +1,21 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Tooltip, Typography } from "@mui/material"
-import { useOrder } from "../../hooks/useOrder"
-import { IOrderItem } from "../../models/IOrderItem"
-import { Timer } from "../Timer/Timer"
+import { Card, CardContent,Tooltip, Typography } from "@mui/material";
+import { useOrder } from "../../../hooks/useOrder";
+import { IOrderItem } from "../../../models/IOrderItem";
+import { Timer } from "../../Timer/Timer";
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import OutdoorGrillIcon from '@mui/icons-material/OutdoorGrill';
 import CheckIcon from '@mui/icons-material/Check';
+import { useEffect, useState } from "react";
 
-export const OrderItemStatus: React.FC<IOrderItem> = (props: IOrderItem) => {
+export const PlacedOrderItemStatus: React.FC<IOrderItem> = (props: IOrderItem) => {
     const { getByTableNumber } = useOrder();
+    const [countdown, setCountdown] = useState<number>(0);
+
+    useEffect(() => {
+        if(props.remainingPreparationTime) setCountdown(props.remainingPreparationTime);
+        else if(props.remainingCookingTime) setCountdown(props.remainingCookingTime);
+    }, [props]);
 
     const renderStatus = (status: number) => {
         switch(status) {
@@ -30,13 +37,10 @@ export const OrderItemStatus: React.FC<IOrderItem> = (props: IOrderItem) => {
                 <div className="orderItemTimer">
                     <Typography variant="caption" className="status">{renderStatus(props.status)}</Typography>
                     {
-                        (props.status === 2 || props.status === 3) &&
-                            <Typography variant="caption">
-                                {
-                                props.remainingPreparationTime > 0 ? <Timer duration={props.remainingPreparationTime} callback={() => getByTableNumber!(1)} /> : 
-                                <Timer duration={props.remainingCookingTime} callback={() => getByTableNumber!(1)} />
-                                }
-                            </Typography>
+                        countdown > 0 &&
+                        <Typography variant="caption">
+                            <Timer duration={countdown} callback={() => getByTableNumber!()} />
+                        </Typography>
                     }
                 </div>
 

@@ -1,5 +1,5 @@
 {
-  "name": "todo",
+  "name": "simang_bistro",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -24,7 +24,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "local": "set REACT_APP_API_URL=https://localhost:5001/&& react-scripts start ",
+    "local": "set REACT_APP_API_URL=https://localhost:5001/&& set REACT_APP_TABLE_NUMBER=1&& react-scripts start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

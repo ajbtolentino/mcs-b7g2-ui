@@ -1,8 +1,8 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Link, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardHeader, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useOrder } from "../../hooks/useOrder";
-import { IOrderItem } from "../../models/IOrderItem";
-import { OrderItemPlaced } from "./OrderItemPending";
+import { useOrder } from "../../../hooks/useOrder";
+import { IOrderItem } from "../../../models/IOrderItem";
+import { PendingOrderItem } from "./PendingOrderItem";
 
 export const PendingOrders = () => {
     const { order, loading, place } = useOrder();
@@ -23,21 +23,22 @@ export const PendingOrders = () => {
 
     return (
         <Card sx={{minWidth: 275}}>
-            <CardHeader title="Place Order"/>
+            <CardHeader title="Pending Orders"/>
             <CardContent>
-                { 
-                    pendingOrders.map(item => 
-                        {
-                            return <div key={item.id}><OrderItemPlaced {...item} /></div>;
-                        }
-                    )
-                }
                 {
-                    !loading && pendingOrders.length == 0 &&
+                    !loading && pendingOrders.length === 0 &&
                     <Typography variant="subtitle1">No pending orders</Typography>
                 }
                 {
-                    loading && <Typography variant="subtitle1">Loading...</Typography>
+                    loading && pendingOrders.length === 0 && 
+                    <Typography variant="subtitle1">Loading...</Typography>
+                }
+                { 
+                    pendingOrders.map(item => 
+                        {
+                            return <div key={item.id}><PendingOrderItem {...item} /></div>;
+                        }
+                    )
                 }
             </CardContent>
             {

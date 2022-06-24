@@ -2,7 +2,7 @@ import { Button, Card, CardActions, CardContent, CardHeader, Stack, Typography }
 import { useOrder } from "../../hooks/useOrder";
 
 export const ChefRecommended = () => {
-    const { addRecommended } = useOrder();
+    const { addRecommended, addAllRecommended } = useOrder();
 
     return (
     <Card sx={{maxWidth: 275}}>
@@ -13,6 +13,7 @@ export const ChefRecommended = () => {
                     <Button fullWidth onClick={() => addRecommended!(2)}>Add Main</Button>
                     <Button fullWidth onClick={() => addRecommended!(3)}>Add Dessert</Button>
                     <Button fullWidth onClick={() => addRecommended!(4)}>Add Drink</Button>
+                    <Button fullWidth onClick={() => addAllRecommended!()}>Add All Recommended</Button>
                 </Stack>
             </CardContent>
     </Card>

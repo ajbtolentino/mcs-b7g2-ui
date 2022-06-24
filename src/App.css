@@ -27,6 +27,10 @@ body {
     align-items: center;
 }
 
+.loading.container .MuiCircularProgress-svg {
+    color: #ffb80e !important
+}
+
 .enter.container {
     align-items: center;
     justify-content: center;
@@ -150,6 +154,10 @@ body {
 
 .left .orderCommands button {
     margin-bottom: 10px;
+}
+
+.left .orderCommands .completedLabel {
+    align-items: center !important;
 }
 
 .orderItemStatus {

@@ -4,10 +4,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Dashboard } from '@mui/icons-material';
 import { NotFound } from './components/NotFound';
 import { MenuContextProvider } from './context/menu/menuContextProvider';
-import { OrderContext } from './context/order/orderContext';
 import { OrderContextProvider } from './context/order/orderContextProvider';
 
 ReactDOM.render(

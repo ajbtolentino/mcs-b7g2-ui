@@ -14,8 +14,8 @@ export const Filters = () => {
             <Button variant="outlined" onClick={() => getAllItems!()}>Show All</Button>
             <Button variant="outlined" onClick={() => filterByCategory!(1)}><SoupKitchenIcon />Appetizers</Button>
             <Button variant="outlined" onClick={() => filterByCategory!(2)}><RestaurantMenuIcon />Main Courses</Button>
-            <Button variant="outlined" onClick={() => filterByCategory!(3)}><FreeBreakfastIcon />Drinks</Button>
-            <Button variant="outlined" onClick={() => filterByCategory!(4)}><IcecreamIcon />Desserts</Button>
+            <Button variant="outlined" onClick={() => filterByCategory!(3)}><IcecreamIcon />Desserts</Button>
+            <Button variant="outlined" onClick={() => filterByCategory!(4)}><FreeBreakfastIcon />Drinks</Button>
         </>
     )
-}
+};

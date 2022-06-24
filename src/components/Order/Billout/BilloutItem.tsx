@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material"
-import { IOrderItem } from "../../models/IOrderItem"
+import { IOrderItem } from "../../../models/IOrderItem"
 
-export const PlacedOrderItem: React.FC<IOrderItem> = (props: IOrderItem) => {
+export const PlacedOrderItemBillout: React.FC<IOrderItem> = (props: IOrderItem) => {
     return (
         <div className="orderItem price">
             <Typography variant="caption">{props.menu.name} x {props.quantity} </Typography>
