@@ -6,45 +6,29 @@ import { useOrder } from "../hooks/useOrder";
 import { ChefRecommended } from "./Menu/ChefRecommended";
 import { Menu } from "./Menu/Menu";
 import { PlacedOrders, PendingOrders, Billout } from "./Order";
+import { useSnackbar } from 'notistack'
 
 export const Dashboard = () => {
-    const { errors: menuErrors } = useMenu();
-    const { isBillout, errors: orderErrors, getByTableNumber } = useOrder();
+    const { error: menuError } = useMenu();
+    const { success: orderSuccess, 
+            error: orderError, 
+            isBillout, 
+            getByTableNumber } = useOrder();
 
-    const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
-    const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         if(getByTableNumber) getByTableNumber();
     }, []);
     
     useEffect(() => {
-      setShowSnackbar(menuErrors.length > 0 || orderErrors.length > 0);
-      
-      if(menuErrors.length) {
-        setSnackbarMessage(menuErrors[0]);
-      }
-
-      if(orderErrors.length) {
-        setSnackbarMessage(orderErrors[0]);
-      }
-  
-    }, [menuErrors, orderErrors]);
+      if(menuError?.length) enqueueSnackbar(menuError, { variant: 'error',  });
+      if(orderError?.length) enqueueSnackbar(orderError, { variant: 'error' });
+      if(orderSuccess?.length) enqueueSnackbar(orderSuccess, { variant: 'success' });
+    }, [menuError, orderError, orderSuccess]);
     
     return (
     <>
-        <Snackbar
-            anchorOrigin={{ vertical: "top", horizontal: "center" }}
-            autoHideDuration={5000000}
-            open={showSnackbar}
-            onClose={() => setShowSnackbar(false)}
-            style={{border: "5px #813531 solid", backgroundColor: "white"}}
-        >
-            <Alert onClose={() => setShowSnackbar(false)} severity={"error"} sx={{ width: '100%' }}>
-                {snackbarMessage}
-            </Alert>
-        </Snackbar>
-
         <div className="dashboard container">
             <div className="left container">
                 <Box className="recommended">

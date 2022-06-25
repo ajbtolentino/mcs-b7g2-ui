@@ -40,8 +40,7 @@ export const PlacedOrders = () => {
                     orderItems.map(item => 
                         {
                             return <div key={item.id}><PlacedOrderItemStatus {...item} /></div>
-                        }
-                    )
+                        })
                 }
                 {
                     order && isProcessing && remainingTime > 0 &&

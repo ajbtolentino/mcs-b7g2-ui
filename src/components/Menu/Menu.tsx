@@ -8,11 +8,7 @@ import { Filters } from "./Filters";
 import { MenuItem } from "./MenuItem";
 
 export const Menu = () => {
-    const { loading, items, getAllItems } = useMenu();
-
-    useEffect(() => {
-        if(getAllItems) getAllItems!();
-    }, []);
+    const { loading, items } = useMenu();
 
     return (
         <>

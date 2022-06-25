@@ -4,7 +4,8 @@ import { IOrder } from "../../models/IOrder";
 interface IOrderContext {
     order?: IOrder;
     loading: boolean;
-    errors: string[];
+    error: string;
+    success: string;
     isBillout: boolean;
     getByOrder?: () => Promise<void>;
     getByTableNumber?: () => Promise<void>;
@@ -19,6 +20,7 @@ interface IOrderContext {
 
 export const OrderContext = React.createContext<IOrderContext>({
     loading: false,
-    errors: [],
+    error: '',
+    success: '',
     isBillout: false,
 });

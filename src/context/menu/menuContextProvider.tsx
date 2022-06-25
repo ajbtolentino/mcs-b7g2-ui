@@ -10,15 +10,18 @@ const FILTER_BY_CHEF_RECOMMENDATION_URL = (categoryId: number): string => `/Menu
 export const MenuContextProvider: React.FC<{}> = (props) => {
     const [items, setItems] = useState<IMenuItem[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-    const [errors, setErrors] = useState<string[]>([]);
+    const [error, setError] = useState<string>('');
+    const [success, setSuccess] = useState<string>('');
 
     const handleError = (err: any) => {
-        setErrors([err.response.data.detail]);
+        if(err.response?.data?.detail) setError(err.response.data.detail);
+        else if(err.response?.data?.errors) setError(err.response.data.title);
+        else setError(err.response.data);
     };
 
     const getAllItems = async () => {
         try {
-            setErrors([]);
+            setError('');
             setLoading(true);
 
             const response = await axios.get<IMenuItem[]>(GET_MENU_URL);
@@ -33,7 +36,7 @@ export const MenuContextProvider: React.FC<{}> = (props) => {
 
     const filterByCategory = async (categoryId: number) => {
         try {
-            setErrors([]);
+            setError('');
             setLoading(true);
 
             const menu = await axios.get<IMenuItem[]>(FILTER_BY_CATEGORY_URL(categoryId));
@@ -48,7 +51,7 @@ export const MenuContextProvider: React.FC<{}> = (props) => {
 
     const filterByChefRecommended = async (categoryId: number) => {
         try {
-            setErrors([]);
+            setError('');
             setLoading(true);
 
             const menu = await axios.get<IMenuItem[]>(FILTER_BY_CHEF_RECOMMENDATION_URL(categoryId));
@@ -64,7 +67,8 @@ export const MenuContextProvider: React.FC<{}> = (props) => {
     return(
         <MenuContext.Provider value={{
             loading: loading,
-            errors: errors,
+            success: success,
+            error: error,
             items: [...items],
             getAllItems: getAllItems,
             filterByCategory: filterByCategory,

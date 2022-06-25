@@ -5,6 +5,7 @@ import './App.css';
 import { Dashboard } from './components/Dashboard';
 import { MenuContextProvider } from './context/menu/menuContextProvider';
 import { OrderContextProvider } from './context/order/orderContextProvider';
+import { SnackbarProvider } from 'notistack';
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -27,7 +28,9 @@ function App() {
       number &&
       <OrderContextProvider tableNumber={number}>
         <MenuContextProvider>
-          <Dashboard />
+          <SnackbarProvider autoHideDuration={5000} maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+            <Dashboard />
+          </SnackbarProvider>
         </MenuContextProvider>
       </OrderContextProvider>
     }

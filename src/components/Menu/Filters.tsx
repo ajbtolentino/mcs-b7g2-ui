@@ -9,7 +9,7 @@ import { green } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 
 export const Filters = () => {
-    const {getAllItems, filterByCategory, filterByChefRecommended } = useMenu();
+    const { getAllItems, filterByCategory, filterByChefRecommended } = useMenu();
     const [category, setCategory] = useState<number>();
     const [chefRecommendedOnly, setChefRecommendedOnly] = useState<boolean>(false);
 
@@ -22,9 +22,7 @@ export const Filters = () => {
             if(chefRecommendedOnly) filterByChefRecommended!(category);
             else if(category) filterByCategory!(category);
         }
-        else {
-            getAllItems!();
-        }
+        else getAllItems!();
     }, [chefRecommendedOnly, category]);
 
     const getAll = () => {

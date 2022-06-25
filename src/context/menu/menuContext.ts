@@ -3,7 +3,8 @@ import { IMenuItem } from "../../models/IMenuItem";
 
 interface IMenuContext {
     loading: boolean;
-    errors: string[];
+    success: string;
+    error: string;
     items: IMenuItem[];
     getAllItems?: () => Promise<void>;
     getAllChefRecommendedItems?: () => Promise<void>;
@@ -13,6 +14,7 @@ interface IMenuContext {
 
 export const MenuContext = React.createContext<IMenuContext>({
     loading: false,
-    errors: [],
+    success: '',
+    error: '',
     items: [],
 });
