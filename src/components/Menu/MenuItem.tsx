@@ -13,7 +13,7 @@ import { useState } from "react";
 
 export const MenuItem: React.FC<IMenuItem> = (props: IMenuItem) => {
     const { addOrderItem } = useOrder();
-    const [quantity, setQuantity] = useState<number>(0);
+    const [quantity, setQuantity] = useState<number>(1);
 
     const renderCategory = () => {
         switch(props.category) {
