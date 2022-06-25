@@ -6,6 +6,7 @@ interface IOrderContext {
     loading: boolean;
     errors: string[];
     isBillout: boolean;
+    getByOrder?: () => Promise<void>;
     getByTableNumber?: () => Promise<void>;
     complete?: () => Promise<void>;
     place?: () => Promise<void>;

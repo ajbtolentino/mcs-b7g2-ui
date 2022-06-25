@@ -77,6 +77,16 @@ body {
     justify-content: space-around;
 }
 
+.menu .filters .chefRecommended,
+.menu .filters .Mui-checked,
+.menu .filters path {
+    color: #ffb80e !important;
+}
+
+.menu .filters .Mui-disabled path {
+    color: rgba(0, 0, 0, 0.38) !important;
+}
+
 .menu .filters button {
     border-color: 		#ffb80e;
     color: 			#ffb80e;

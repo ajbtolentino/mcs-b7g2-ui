@@ -3,23 +3,18 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { NotFound } from './components/NotFound';
-import { MenuContextProvider } from './context/menu/menuContextProvider';
-import { OrderContextProvider } from './context/order/orderContextProvider';
 
 ReactDOM.render(
   <React.StrictMode>
-    <OrderContextProvider>
-      <MenuContextProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<App />} />
-            <Route path="*" element={<NotFound />}/>
-          </Routes>
-        </BrowserRouter>
-      </MenuContextProvider>
-    </OrderContextProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate replace to="/table/1" />} />
+          <Route path="table/:tableNumber" element={<App />} />
+          <Route path="*" element={<NotFound />}/>
+        </Routes>
+      </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

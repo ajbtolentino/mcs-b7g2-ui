@@ -66,7 +66,7 @@ export const MenuItem: React.FC<IMenuItem> = (props: IMenuItem) => {
                 </div>
             </CardContent>
             <CardActions>
-                <TextField className="menuQuantity" size="small" type="number" InputLabelProps={{shrink:true}} onChange={(e) => setQuantity(+e.target.value >= 0 ? +e.target.value : 0)} value={quantity} />
+                <TextField className="menuQuantity" size="small" type="number" InputLabelProps={{shrink:true}} onChange={(e) => setQuantity(e.target.value.match(/^[1-9]+$/) ? +e.target.value : quantity)} value={quantity} />
                 <Button variant="contained" disabled={quantity === 0} fullWidth onClick={() => addOrderItem!(props.id, quantity)}>Add</Button>
             </CardActions>
         </Card>

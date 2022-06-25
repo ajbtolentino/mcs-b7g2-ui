@@ -44,7 +44,22 @@ export const MenuContextProvider: React.FC<{}> = (props) => {
         } finally {
             setLoading(false);
         }
-    }
+    };
+
+    const filterByChefRecommended = async (categoryId: number) => {
+        try {
+            setErrors([]);
+            setLoading(true);
+
+            const menu = await axios.get<IMenuItem[]>(FILTER_BY_CHEF_RECOMMENDATION_URL(categoryId));
+
+            setItems([...menu.data]);
+        } catch (err: any) {
+            handleError(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return(
         <MenuContext.Provider value={{
@@ -52,7 +67,8 @@ export const MenuContextProvider: React.FC<{}> = (props) => {
             errors: errors,
             items: [...items],
             getAllItems: getAllItems,
-            filterByCategory: filterByCategory
+            filterByCategory: filterByCategory,
+            filterByChefRecommended: filterByChefRecommended
         }}>
             {props.children}
         </MenuContext.Provider>

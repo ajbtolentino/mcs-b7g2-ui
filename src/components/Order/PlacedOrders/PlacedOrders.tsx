@@ -44,7 +44,7 @@ export const PlacedOrders = () => {
                     )
                 }
                 {
-                    order && isProcessing &&
+                    order && isProcessing && remainingTime > 0 &&
                     <div>
                         <Typography variant="subtitle1">Orders served in <Timer duration={remainingTime} /></Typography>
                     </div>

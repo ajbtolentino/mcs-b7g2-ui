@@ -9,7 +9,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { useEffect, useState } from "react";
 
 export const PlacedOrderItemStatus: React.FC<IOrderItem> = (props: IOrderItem) => {
-    const { getByTableNumber } = useOrder();
+    const { getByOrder } = useOrder();
     const [countdown, setCountdown] = useState<number>(0);
 
     useEffect(() => {
@@ -39,7 +39,7 @@ export const PlacedOrderItemStatus: React.FC<IOrderItem> = (props: IOrderItem) =
                     {
                         countdown > 0 &&
                         <Typography variant="caption">
-                            <Timer duration={countdown} callback={() => getByTableNumber!()} />
+                            <Timer duration={countdown} callback={() => getByOrder!()} />
                         </Typography>
                     }
                 </div>
