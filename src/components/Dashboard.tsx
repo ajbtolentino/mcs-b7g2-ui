@@ -1,4 +1,3 @@
-import { Alert, Snackbar } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useMenu } from "../hooks/useMenu";
@@ -20,9 +19,12 @@ export const Dashboard = () => {
     useEffect(() => {
         if(getByTableNumber) getByTableNumber();
     }, []);
+
+    useEffect(() => {
+        if(menuError?.length) enqueueSnackbar(menuError, { variant: 'error',  });
+    }, [menuError]);
     
     useEffect(() => {
-      if(menuError?.length) enqueueSnackbar(menuError, { variant: 'error',  });
       if(orderError?.length) enqueueSnackbar(orderError, { variant: 'error' });
       if(orderSuccess?.length) enqueueSnackbar(orderSuccess, { variant: 'success' });
     }, [menuError, orderError, orderSuccess]);

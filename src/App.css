@@ -83,6 +83,11 @@ body {
     color: #ffb80e !important;
 }
 
+.menu .filters button.Mui-disabled {
+    color: rgba(0, 0, 0, 0.38);
+    border-color: rgba(0, 0, 0, 0.38);
+}
+
 .menu .filters .Mui-disabled path {
     color: rgba(0, 0, 0, 0.38) !important;
 }

@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Stack, Typography } from "@mui/material";
+import { Button, Card, CardContent, CardHeader, Stack } from "@mui/material";
 import { useOrder } from "../../hooks/useOrder";
 
 export const ChefRecommended = () => {

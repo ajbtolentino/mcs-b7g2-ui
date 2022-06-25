@@ -32,7 +32,7 @@ export const Filters = () => {
 
     return (
         <>
-            <Button variant="outlined" onClick={() => getAll()}>Show All</Button>
+            <Button variant="outlined" disabled={!category} onClick={() => getAll()}>Show All</Button>
             <Button variant="outlined" onClick={() => setCategory(1)}><SoupKitchenIcon />Appetizers</Button>
             <Button variant="outlined" onClick={() => setCategory(2)}><RestaurantMenuIcon />Main Courses</Button>
             <Button variant="outlined" onClick={() => setCategory(3)}><IcecreamIcon />Desserts</Button>
