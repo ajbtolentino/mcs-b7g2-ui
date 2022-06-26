@@ -21,62 +21,57 @@ export const Billout = () => {
         }
     }, [order, loading]);
 
-    return (
-        <Card sx={{minWidth: 275}}>
-            <CardHeader title={"Your Bill"}/>
-            <CardContent>
+    return (<>
+        {
+            !loading && orderItems.length === 0 && <Typography variant="subtitle1">No orders placed</Typography>
+        }
+        {
+            loading && orderItems.length === 0 && <Typography variant="subtitle1">Loading...</Typography>
+        }
+        { 
+            orderItems.map(item => 
                 {
-                    !loading && orderItems.length === 0 && <Typography variant="subtitle1">No orders placed</Typography>
+                    return <div key={item.id}>
+                        <PlacedOrderItemBillout {...item} />
+                    </div>;
                 }
-                {
-                    loading && orderItems.length === 0 && <Typography variant="subtitle1">Loading...</Typography>
-                }
-                { 
-                    orderItems.map(item => 
-                        {
-                            return <div key={item.id}>
-                                <PlacedOrderItemBillout {...item} />
-                            </div>;
-                        }
-                    )
-                }
-                {
-                    order &&
-                    <div  className="orderItem totalBill">
-                        <div className="billPrice">
-                            <Typography variant="caption">Inclusive Tax</Typography>
-                            <Typography variant="caption">{Intl.NumberFormat('en-US', {style:"currency", currency: "Php"}).format(order?.inclusiveTax)}</Typography>
-                        </div>
-                        <div className="billPrice">
-                            <Typography variant="caption">Service Charge</Typography>
-                            <Typography variant="caption">{Intl.NumberFormat('en-US', {style:"currency", currency: "Php"}).format(order?.serviceCharge)}</Typography>
-                        </div>
-                        <div className="billPrice totalBillPrice">
-                            <Typography variant="caption">Total Bill</Typography>
-                            <Typography variant="caption">{Intl.NumberFormat('en-US', {style:"currency", currency: "Php"}).format(order?.totalBill)}</Typography>
-                        </div>
-                    </div>
-                }
-                {
-                    isCompleted && <Typography className="completedLabel" variant="subtitle1">Order has been completed</Typography>
-                }
-            </CardContent>
+            )
+        }
+        {
+            order &&
+            <div  className="orderItem totalBill">
+                <div className="billPrice">
+                    <Typography variant="caption">Inclusive Tax</Typography>
+                    <Typography variant="caption">{Intl.NumberFormat('en-US', {style:"currency", currency: "Php"}).format(order?.inclusiveTax)}</Typography>
+                </div>
+                <div className="billPrice">
+                    <Typography variant="caption">Service Charge</Typography>
+                    <Typography variant="caption">{Intl.NumberFormat('en-US', {style:"currency", currency: "Php"}).format(order?.serviceCharge)}</Typography>
+                </div>
+                <div className="billPrice totalBillPrice">
+                    <Typography variant="caption">Total Bill</Typography>
+                    <Typography variant="caption">{Intl.NumberFormat('en-US', {style:"currency", currency: "Php"}).format(order?.totalBill)}</Typography>
+                </div>
+            </div>
+        }
+        {
+            isCompleted && <Typography className="completedLabel" style={{textAlign: "center"}} variant="subtitle1">Order has been completed</Typography>
+        }
+    {
+        orderItems.length > 0 && !order?.isCompleted &&
+        <CardActions className="orderCommands" style={{alignItems: "center"}}>
             {
-                orderItems.length > 0 && !order?.isCompleted &&
-                <CardActions className="orderCommands">
-                    {
-                        !isCompleted &&
-                        <>
-                            <Button disabled={loading} fullWidth variant="contained" onClick={() => toggleBillout!()}>
-                                Go back
-                            </Button>
-                            <Button disabled={loading} fullWidth variant="contained" onClick={() => complete!()}>
-                                Complete Order
-                            </Button>
-                        </>
-                    }
-                </CardActions>
+                !isCompleted &&
+                <>
+                    <Button disabled={loading} style={{marginTop: 5, marginBottom: 5}} fullWidth variant="contained" onClick={() => toggleBillout!()}>
+                        Go back
+                    </Button>
+                    <Button disabled={loading} style={{marginTop: 5, marginBottom: 5, marginLeft: 0}} fullWidth variant="contained" onClick={() => complete!()}>
+                        Complete Order
+                    </Button>
+                </>
             }
-        </Card>
-    );
+        </CardActions>
+    }
+    </>);
 }

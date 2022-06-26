@@ -26,15 +26,12 @@ export const PlacedOrders = () => {
         }
     }, [order, loading]);
 
-    return (
-        <Card sx={{minWidth: 275}}>
-            <CardHeader title={"Your Orders"}/>
-            <CardContent>
+    return (<>
                 {
-                    loading && orderItems.length === 0 && <Typography variant="subtitle1">Loading...</Typography>
+                    loading && orderItems.length === 0 && <Typography variant="subtitle1" style={{textAlign: "center"}}>Loading...</Typography>
                 }
                 {
-                    !loading && orderItems.length === 0 && <Typography variant="subtitle1">No orders placed</Typography>
+                    !loading && orderItems.length === 0 && <Typography variant="subtitle1" style={{textAlign: "center"}}>No orders placed</Typography>
                 }
                 { 
                     orderItems.map(item => 
@@ -44,25 +41,19 @@ export const PlacedOrders = () => {
                 }
                 {
                     order && isProcessing && remainingTime > 0 &&
-                    <div>
-                        <Typography variant="subtitle1">Orders served in <Timer duration={remainingTime} /></Typography>
-                    </div>
+                        <Typography variant="subtitle1" style={{textAlign: "center"}}>Orders served in <Timer duration={remainingTime} /></Typography>
                 }
                 {
                     order && !isProcessing && orderItems.length > 0 &&
-                    <div>
-                        <Typography variant="subtitle1">Orders have been served</Typography>
-                    </div>
+                    <Typography style={{textAlign: "center"}} variant="subtitle1">Orders have been served</Typography>
                 }
-            </CardContent>
             {
-                orderItems.length > 0 && !order?.isCompleted &&
+                orderItems.length > 0 && order?.status !== 5 &&
                 <CardActions className="orderCommands">
                     <Button disabled={loading || isProcessing} fullWidth variant="contained" onClick={() => toggleBillout!()}>
                         Bill-out
                     </Button>
                 </CardActions>
             }
-        </Card>
-    );
+    </>);
 };

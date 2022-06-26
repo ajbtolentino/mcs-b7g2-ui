@@ -28,14 +28,14 @@ export const PlacedOrderItemStatus: React.FC<IOrderItem> = (props: IOrderItem) =
     };
 
     return (
-        <Card className="orderItem">
+        <Card className="orderItem" style={{marginBottom: 5}}>
             <CardContent>               
                 <div className="orderItemStatus">
                     <Typography variant="caption" className="menuName">{props.menu.name} x {props.quantity}</Typography>
                     <Typography variant="caption">{Intl.NumberFormat('en-US', {style:"currency", currency: "Php"}).format(props.totalPrice)}</Typography>
                 </div>
                 <div className="orderItemTimer">
-                    <Typography variant="caption" className="status">{renderStatus(props.status)}</Typography>
+                    <Typography variant="caption" className="status" style={{textAlign: "center"}}>{renderStatus(props.status)}</Typography>
                     {
                         countdown > 0 &&
                         <Typography variant="caption">

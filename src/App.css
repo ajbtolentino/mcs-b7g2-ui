@@ -78,9 +78,12 @@ body {
 }
 
 .menu .filters .chefRecommended,
-.menu .filters .Mui-checked,
-.menu .filters path {
+.menu .filters .Mui-checked {
     color: #ffb80e !important;
+}
+
+.Mui-checked path {
+    color: #813531
 }
 
 .menu .filters button.Mui-disabled {
@@ -120,7 +123,7 @@ body {
     margin-bottom: auto;
 }
 
-.menu .items .MuiCardContent-root .details {
+.MuiCardContent-root .details {
     display: flex;
     justify-content: space-between;
 }
@@ -140,34 +143,34 @@ body {
     margin-bottom: 5px;
 }
 
-.left .orderItem {
+.orderItem {
     margin: 10px;
 }
 
-.left .orderItem.price {
+.orderItem.price {
     display: flex;
     justify-content: space-between;
 }
 
-.left .orderItem.totalBill {
+.orderItem.totalBill {
     display: flex;
     flex-direction: column;
     border-top: 2px solid #982121 !important;
 }
 
-.left .totalBill .billPrice {
+.totalBill .billPrice {
     display: flex;
     justify-content: space-between;
 }
 
-.left .orderCommands {
+.orderCommands {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-end;
 }
 
-.left .orderCommands button {
+.orderCommands button {
     margin-bottom: 10px;
 }
 
@@ -203,7 +206,7 @@ body {
     color: #982121 !important;
 }
 
-.left .totalBill .billPrice.totalBillPrice {
+.totalBill .billPrice.totalBillPrice {
     border-top: 2px solid #982121 !important;
 }
 

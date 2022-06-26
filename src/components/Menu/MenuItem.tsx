@@ -48,7 +48,9 @@ export const MenuItem: React.FC<IMenuItem> = (props: IMenuItem) => {
             />
             <CardContent>
                 <div className="description">
-                    <Typography variant="body2">{props.description}</Typography>  
+                    <Tooltip title={props.description}>
+                        <Typography style={{textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden"}} variant="body2">{props.description}</Typography>  
+                    </Tooltip>
                 </div>
                 <div className="price">
                     <Typography variant="body2">{Intl.NumberFormat('en-US', {style:"currency", currency: "Php"}).format(props.itemPrice)}</Typography>  

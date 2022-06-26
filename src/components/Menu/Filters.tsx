@@ -32,14 +32,14 @@ export const Filters = () => {
 
     return (
         <>
-            <Button variant="outlined" disabled={!category} onClick={() => getAll()}>Show All</Button>
-            <Button variant="outlined" onClick={() => setCategory(1)}><SoupKitchenIcon />Appetizers</Button>
-            <Button variant="outlined" onClick={() => setCategory(2)}><RestaurantMenuIcon />Main Courses</Button>
-            <Button variant="outlined" onClick={() => setCategory(3)}><IcecreamIcon />Desserts</Button>
-            <Button variant="outlined" onClick={() => setCategory(4)}><FreeBreakfastIcon />Drinks</Button>
+            <Button variant="outlined" fullWidth style={{margin: 5, border: "hidden"}} disabled={!category} onClick={() => getAll()}>Show All</Button>
+            <Button variant="outlined" fullWidth style={{margin: 5, border: "hidden"}} onClick={() => setCategory(1)}><SoupKitchenIcon />Appetizers</Button>
+            <Button variant="outlined" fullWidth style={{margin: 5, border: "hidden"}} onClick={() => setCategory(2)}><RestaurantMenuIcon />Main Courses</Button>
+            <Button variant="outlined" fullWidth style={{margin: 5, border: "hidden"}} onClick={() => setCategory(3)}><IcecreamIcon />Desserts</Button>
+            <Button variant="outlined" fullWidth style={{margin: 5, border: "hidden"}} onClick={() => setCategory(4)}><FreeBreakfastIcon />Drinks</Button>
             <FormGroup>
-                <FormControlLabel className="chefRecommended" sx={{color: "#ffb80e", '&.Mui-checked': {color: green}}} 
-                    control={<Checkbox checked={chefRecommendedOnly} onChange={onCheck} disabled={!category} />} label="Chef Recommended Only" />
+                <FormControlLabel className="chefRecommended"
+                    control={<Checkbox checked={chefRecommendedOnly} style={{}} onChange={onCheck} disabled={!category} />} label="Chef Recommended Only" />
             </FormGroup>
         </>
     )

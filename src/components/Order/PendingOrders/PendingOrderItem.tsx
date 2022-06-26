@@ -6,18 +6,18 @@ export const PendingOrderItem: React.FC<IOrderItem> = (props: IOrderItem) => {
     const { loading, cancelItem } = useOrder();
 
     return (
-        <Card className="orderItem">
+        <Card className="orderItem" style={{marginBottom: "2px"}}>
             <CardContent>               
                 <div className="orderItemStatus">
                     <Typography variant="caption" className="menuName">{props.menu.name} x {props.quantity}</Typography>
                     <Typography variant="caption">{Intl.NumberFormat('en-US', {style:"currency", currency: "Php"}).format(props.totalPrice)}</Typography>
                 </div>
             </CardContent>
-            <CardActions className="orderCommands">
-                    <Button disabled={loading} size="small" onClick={() => cancelItem!(props.id)}>
-                        Cancel
-                    </Button>
-                </CardActions>
+            <CardActions className="orderCommands" style={{alignItems: "flex-end"}}>
+                <Button disabled={loading} size="small" onClick={() => cancelItem!(props.id)}>
+                    Cancel
+                </Button>
+            </CardActions>
         </Card>
     )
 }

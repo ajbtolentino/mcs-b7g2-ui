@@ -21,34 +21,29 @@ export const PendingOrders = () => {
         setShowPlaceOrder(pendingOrders.length > 0)
     }, [pendingOrders]);
 
-    return (
-        <Card sx={{minWidth: 275}}>
-            <CardHeader title="Pending Orders"/>
-            <CardContent>
+    return (<>
+        {
+            !loading && pendingOrders.length === 0 &&
+            <Typography variant="subtitle1" style={{textAlign: "center"}}>No pending orders</Typography>
+        }
+        {
+            loading && pendingOrders.length === 0 && 
+            <Typography variant="subtitle1" style={{textAlign: "center"}}>Loading...</Typography>
+        }
+        { 
+            pendingOrders.map(item => 
                 {
-                    !loading && pendingOrders.length === 0 &&
-                    <Typography variant="subtitle1">No pending orders</Typography>
+                    return <div key={item.id}><PendingOrderItem {...item} /></div>;
                 }
-                {
-                    loading && pendingOrders.length === 0 && 
-                    <Typography variant="subtitle1">Loading...</Typography>
-                }
-                { 
-                    pendingOrders.map(item => 
-                        {
-                            return <div key={item.id}><PendingOrderItem {...item} /></div>;
-                        }
-                    )
-                }
-            </CardContent>
-            {
-                showPlaceOrder && 
-                <CardActions className="orderCommands">
-                    <Button disabled={loading} fullWidth onClick={() => place!()}>
-                        Place
-                    </Button>
-                </CardActions>
-            }
-        </Card>
-    );
+            )
+        }
+        {
+            showPlaceOrder && 
+            <CardActions className="orderCommands">
+                <Button disabled={loading} fullWidth onClick={() => place!()}>
+                    Place
+                </Button>
+            </CardActions>
+        }
+    </>);
 };
