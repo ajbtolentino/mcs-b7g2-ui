@@ -84,7 +84,7 @@ export const Dashboard = () => {
                 </Accordion>
                 <Accordion expanded={expanded === 'pending'} onChange={handleChange('pending')}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography>Pending Orders ({pendingOrderCount})</Typography>
+                        <Typography>Pending Orders</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                         <PendingOrders  />
