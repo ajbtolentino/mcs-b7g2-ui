@@ -9,7 +9,7 @@ export const PendingOrderItem: React.FC<IOrderItem> = (props: IOrderItem) => {
         <Card className="orderItem" style={{marginBottom: "2px"}}>
             <CardContent>               
                 <div className="orderItemStatus">
-                    <Typography variant="caption" className="menuName">{props.menu.name} x {props.quantity}</Typography>
+                    <Typography variant="caption" className="menuName">{props.menu.name} x{props.quantity}</Typography>
                     <Typography variant="caption">{Intl.NumberFormat('en-US', {style:"currency", currency: "Php"}).format(props.totalPrice)}</Typography>
                 </div>
             </CardContent>
