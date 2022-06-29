@@ -28,7 +28,7 @@ export const PlacedOrders = () => {
 
     return (<>
                 {
-                    loading && orderItems.length === 0 && <Typography variant="subtitle1" style={{textAlign: "center"}}>Loading...</Typography>
+                    loading && orderItems.length === 0&& <Typography variant="subtitle1" style={{textAlign: "center"}}>Loading...</Typography>
                 }
                 {
                     !loading && orderItems.length === 0 && <Typography variant="subtitle1" style={{textAlign: "center"}}>No orders placed</Typography>
@@ -40,8 +40,8 @@ export const PlacedOrders = () => {
                         })
                 }
                 {
-                    order && isProcessing && remainingTime > 0 &&
-                        <Typography variant="subtitle1" style={{textAlign: "center"}}>Orders served in <Timer duration={remainingTime} /></Typography>
+                    order && isProcessing && remainingTime > 1 &&
+                        <Typography variant="subtitle1" style={{textAlign: "center"}}>Orders will be served in <Timer duration={remainingTime} /></Typography>
                 }
                 {
                     order && !isProcessing && orderItems.length > 0 &&

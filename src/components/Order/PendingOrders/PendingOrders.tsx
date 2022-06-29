@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Typography } from "@mui/material";
+import { Button, CardActions, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useOrder } from "../../../hooks/useOrder";
 import { IOrderItem } from "../../../models/IOrderItem";
@@ -13,12 +13,12 @@ export const PendingOrders = () => {
         if(order) {
             const orderItems = order.orderItems ?? [];
         
-            setPendingOrders(orderItems.filter(_ => _.status === 1));
+            setPendingOrders([...orderItems.filter(_ => _.status === 1)]);
         }
     }, [order]);
 
     useEffect(() => {
-        setShowPlaceOrder(pendingOrders.length > 0)
+        setShowPlaceOrder(pendingOrders.length > 0);
     }, [pendingOrders]);
 
     return (<>

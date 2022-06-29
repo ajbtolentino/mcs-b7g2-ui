@@ -5,7 +5,6 @@ import FreeBreakfastIcon from '@mui/icons-material/FreeBreakfast';
 import IcecreamIcon from '@mui/icons-material/Icecream';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
-import { green } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 
 export const Filters = () => {

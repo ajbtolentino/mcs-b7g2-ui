@@ -27,23 +27,18 @@ export const OrderContextProvider: React.FC<{tableNumber: number}> = (props) => 
         else setError(err.response.data);
     };
 
-    const getByOrder = async () => {
+    const getByOrder = async (id: number) => {
         try {
             setSuccess('');
             setError('');
             setLoading(true);
 
-            if(order) {
-                const response = await axios.get<IOrder>(GET_BY_ORDER(order.id));
+            const response = await axios.get<IOrder>(GET_BY_ORDER(id));
 
-                setOrder(response.data);
-                setIsBillout(response.data.status === 5);
-            }
-            else {
-                getByTableNumber();
-            }
+            setOrder(response.data);
+            setIsBillout(response.data.status === 5);
         } catch (err: any) {
-            if(err.response?.status !== 404) handleError(err);
+            handleError(err);
         } finally {
             setLoading(false);
         }
@@ -60,7 +55,7 @@ export const OrderContextProvider: React.FC<{tableNumber: number}> = (props) => 
 
             setOrder(response.data);
         } catch (err: any) {
-            if(err.response?.status !== 404) handleError(err);
+            handleError(err);
         } finally {
             setLoading(false);
         }
@@ -70,16 +65,17 @@ export const OrderContextProvider: React.FC<{tableNumber: number}> = (props) => 
         try {
             setSuccess('');
             setError('');
-            setLoading(true);
+            setLoading(() => true);
 
-            await axios.post<IOrder>(PLACE_ORDER_URL(TABLE_NUMBER));
+            const response = await axios.post<IOrder>(PLACE_ORDER_URL(TABLE_NUMBER));
 
             setSuccess('Your order has been placed. Please wait while we prepare them.');
+
+            setOrder(response.data);
         } catch (err: any) {
             handleError(err);
         } finally {
             setLoading(false);
-            getByTableNumber();
         }
     };
 
@@ -89,14 +85,15 @@ export const OrderContextProvider: React.FC<{tableNumber: number}> = (props) => 
             setError('');
             setLoading(true);
 
-            await axios.post<IOrder>(COMPLETE_URL(TABLE_NUMBER));
+            const response = await axios.post<IOrder>(COMPLETE_URL(TABLE_NUMBER));
 
             setSuccess('Your order has been completed.');
+
+            setOrder(response.data);
         } catch (err: any) {
             handleError(err);
         } finally {
             setLoading(false);
-            getByOrder();
         }
     };
 
@@ -106,14 +103,15 @@ export const OrderContextProvider: React.FC<{tableNumber: number}> = (props) => 
             setError('');
             setLoading(true);
 
-            await axios.put(ADD_ORDER_ITEM_URL(TABLE_NUMBER, menuId, quantity));
+            const response = await axios.put<IOrder>(ADD_ORDER_ITEM_URL(TABLE_NUMBER, menuId, quantity));
 
             setSuccess('Your order has been added to pending orders.');
+
+            setOrder(response.data);
         } catch (err: any) {
             handleError(err);
         } finally {
             setLoading(false);
-            getByTableNumber();
         }
     };
 
@@ -123,14 +121,15 @@ export const OrderContextProvider: React.FC<{tableNumber: number}> = (props) => 
             setError('');
             setLoading(true);
 
-            await axios.put(ADD_RECOMMENDED_URL(TABLE_NUMBER, category));
+            const response = await axios.put<IOrder>(ADD_RECOMMENDED_URL(TABLE_NUMBER, category));
             
             setSuccess('Order has been added to pending orders.');
+
+            setOrder(response.data);
         } catch (err: any) {
             handleError(err);
         } finally {
             setLoading(false);
-            getByTableNumber();
         }
     };
 
@@ -140,14 +139,15 @@ export const OrderContextProvider: React.FC<{tableNumber: number}> = (props) => 
             setError('');
             setLoading(true);
 
-            await axios.put(ADD_ALL_RECOMMENDED_URL(TABLE_NUMBER));
+            const response = await axios.put<IOrder>(ADD_ALL_RECOMMENDED_URL(TABLE_NUMBER));
 
             setSuccess('All chef recommendations added!');
+
+            setOrder(response.data);
         } catch (err: any) {
             handleError(err);
         } finally {
             setLoading(false);
-            getByTableNumber();
         }
     };
 
@@ -160,11 +160,12 @@ export const OrderContextProvider: React.FC<{tableNumber: number}> = (props) => 
             await axios.delete(CANCEL_ITEM_URL(orderItemId));
 
             setSuccess('Your pending order item has been cancelled.');
+
+            if(order) getByOrder(order?.id);
         } catch (err: any) {
             handleError(err);
         } finally {
             setLoading(false);
-            getByTableNumber();
         }
     };
 

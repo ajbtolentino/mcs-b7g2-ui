@@ -11,7 +11,15 @@ ReactDOM.render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate replace to="/table/1" />} />
-          <Route path="table/:tableNumber" element={<App />} />
+          <Route path="/table">
+            <Route path=":tableNumber">
+              <Route path=":orderId">
+                <Route path="" element={<App />}/>
+              </Route>
+              <Route path="" element={<App />}/>
+            </Route>
+            <Route path="" element={<Navigate replace to="/table/1" />}/>
+          </Route>
           <Route path="*" element={<NotFound />}/>
         </Routes>
       </BrowserRouter>

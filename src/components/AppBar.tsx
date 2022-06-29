@@ -4,7 +4,7 @@ import FastfoodIcon from '@mui/icons-material/Fastfood';
 export const AppBar = () => {
     return (<>
     <MuiAppBar position="sticky">
-        <Toolbar>
+        <Toolbar style={{justifyContent:"center"}}>
             <IconButton
                 size="large"
                 edge="start"
@@ -14,7 +14,7 @@ export const AppBar = () => {
             >
                 <FastfoodIcon />
             </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>Simang Bistro's</Typography>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 0 }}>Garcon's</Typography>
         </Toolbar>
     </MuiAppBar>
     </>);

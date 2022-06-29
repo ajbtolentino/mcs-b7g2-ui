@@ -31,7 +31,7 @@ export const MenuItem: React.FC<IMenuItem> = (props: IMenuItem) => {
     };
 
     return (
-        <Card variant="outlined">
+        <Card variant="outlined" style={{alignSelf: "flex-start"}}>
             <CardHeader
                 title={<Typography variant="body1">{props.name}</Typography>}
                 avatar={props.chefRecommendation && 

@@ -6,18 +6,25 @@ import { Menu } from "./Menu/Menu";
 import { useSnackbar } from 'notistack'
 import { AppBar } from "./AppBar";
 import { LeftInfo } from "./LeftInfo";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const Dashboard = () => {
     const { enqueueSnackbar } = useSnackbar();
-
+    const { orderId, tableNumber } = useParams();
     const { error: menuError } = useMenu();
-    const { success: orderSuccess, 
-            error: orderError,
-            getByTableNumber } = useOrder();
+    const { success: orderSuccess, error: orderError, order, getByTableNumber, getByOrder } = useOrder();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if(getByTableNumber) getByTableNumber();
-    }, []);
+        if(orderId) getByOrder!(+orderId);
+    }, [orderId]);
+
+    useEffect(() => {
+        if(order){
+            if((order.tableNumber.toString() === tableNumber)) navigate(`/table/${tableNumber}/${order.id}`);
+            else navigate("/notfound");
+        }
+    }, [order]);
 
     useEffect(() => {
         if(menuError?.length) enqueueSnackbar(menuError, { variant: 'error',  });
@@ -35,7 +42,8 @@ export const Dashboard = () => {
         <Box display={"flex"} flexDirection={"column"} maxWidth={250}>
             <LeftInfo />
         </Box>
-        <Box display={"flex"} 
+        <Box className="menu"
+             display={"flex"} 
              flexDirection={"row"} 
              flexWrap={"wrap"} 
              flexGrow={1}
